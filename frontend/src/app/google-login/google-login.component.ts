@@ -1,5 +1,9 @@
-import {AfterViewInit, Component, ElementRef, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef} from '@angular/core';
 import {CLIENT_ID} from '../../assets/client-info';
+import {Router} from '@angular/router';
+import {Http} from '@angular/http';
+import 'rxjs/add/operator/map';
+
 declare const gapi: any;
 
 @Component({
@@ -11,10 +15,6 @@ export class GoogleLoginComponent implements AfterViewInit {
 
   private clientId: string;
 
-  private scope = [
-    'profile',
-    'email'
-  ].join(' ');
 
   public auth2: any;
   public googleInit() {
@@ -22,8 +22,7 @@ export class GoogleLoginComponent implements AfterViewInit {
     gapi.load('auth2', function () {
       that.auth2 = gapi.auth2.init({
         client_id: that.clientId,
-        cookiepolicy: 'single_host_origin',
-        scope: that.scope
+        cookiepolicy: 'single_host_origin'
       });
       that.attachSignin(that.element.nativeElement.firstChild);
     });
@@ -33,22 +32,17 @@ export class GoogleLoginComponent implements AfterViewInit {
     this.auth2.attachClickHandler(element, {},
       function (googleUser) {
 
-        const profile = googleUser.getBasicProfile();
-        console.log('Token || ' + googleUser.getAuthResponse().id_token);
-        console.log('ID: ' + profile.getId());
-        console.log('Name: ' + profile.getName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail());
-        // YOUR CODE HERE
+          // const profile = googleUser.getBasicProfile();
+          const id_token: string = googleUser.getAuthResponse().id_token;
 
-
-      }, function (error) {
-        console.log(JSON.stringify(error, undefined, 2));
+          localStorage.setItem('id_token', id_token);
+          that.router.navigate(['home']);
+        }, function (error) {
+          console.log(JSON.stringify(error, undefined, 2));
       });
   }
 
-  constructor(private element: ElementRef) {
-    console.log('ElementRef: ', this.element);
+  constructor(private element: ElementRef, private router: Router, private http: Http) {
     this.clientId = CLIENT_ID;
   }
 
@@ -56,5 +50,11 @@ export class GoogleLoginComponent implements AfterViewInit {
     this.googleInit();
   }
 
+
+  getTokenValidityReponse(token: string) {
+    return this.http.get('https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=' + token)
+      .map(res => res.json())
+      .subscribe(output => console.log(output));
+  }
 
 }

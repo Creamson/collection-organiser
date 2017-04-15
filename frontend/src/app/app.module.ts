@@ -5,18 +5,28 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { GoogleLoginComponent } from './google-login/google-login.component';
+import {RouterModule} from '@angular/router';
+import { HomeComponent } from './home/home.component';
+import { LoginPageComponent } from './login-page/login-page.component';
+import {routes} from './app.routes';
+import {AuthGuard} from './guards/auth.guard';
 
 @NgModule({
   declarations: [
     AppComponent,
-    GoogleLoginComponent
+    GoogleLoginComponent,
+    HomeComponent,
+    LoginPageComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    RouterModule.forRoot(routes, {
+      useHash: true
+    })
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
