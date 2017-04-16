@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import {routes} from './app.routes';
 import {AuthGuard} from './guards/auth.guard';
+import {GoogleAuthService} from './google-auth/google-auth.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import {AuthGuard} from './guards/auth.guard';
       useHash: true
     })
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard, GoogleAuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,10 +1,10 @@
-import {AfterViewInit, Component, ElementRef} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
 import {CLIENT_ID} from '../../assets/client-info';
 import {Router} from '@angular/router';
 import {Http} from '@angular/http';
 import 'rxjs/add/operator/map';
+import {GoogleAuthService} from '../google-auth/google-auth.service';
 
-declare const gapi: any;
 
 @Component({
   selector: 'google-login',
@@ -14,40 +14,16 @@ declare const gapi: any;
 export class GoogleLoginComponent implements AfterViewInit {
 
   private clientId: string;
-
-
-  public auth2: any;
-  public googleInit() {
-    const that = this;
-    gapi.load('auth2', function () {
-      that.auth2 = gapi.auth2.init({
-        client_id: that.clientId,
-        cookiepolicy: 'single_host_origin'
-      });
-      that.attachSignin(that.element.nativeElement.firstChild);
-    });
-  }
-  public attachSignin(element) {
-    const that = this;
-    this.auth2.attachClickHandler(element, {},
-      function (googleUser) {
-
-          // const profile = googleUser.getBasicProfile();
-          const id_token: string = googleUser.getAuthResponse().id_token;
-
-          localStorage.setItem('id_token', id_token);
-          that.router.navigate(['home']);
-        }, function (error) {
-          console.log(JSON.stringify(error, undefined, 2));
-      });
-  }
-
-  constructor(private element: ElementRef, private router: Router, private http: Http) {
+  constructor(private element: ElementRef, private router: Router, private http: Http, private gAuth: GoogleAuthService) {
     this.clientId = CLIENT_ID;
   }
 
   ngAfterViewInit() {
-    this.googleInit();
+    const that = this;
+    // setTimeout(function() {
+    //   that.gAuth.attachSignin(that.element.nativeElement.firstChild);
+    // }, 100);
+    this.gAuth.attachSignin(this.element.nativeElement.firstChild);
   }
 
 
