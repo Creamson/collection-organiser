@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef} from '@angular/core';
 import {CLIENT_ID} from '../../assets/client-info';
 import {Router} from '@angular/router';
 import {Http} from '@angular/http';
@@ -20,9 +20,6 @@ export class GoogleLoginComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     const that = this;
-    // setTimeout(function() {
-    //   that.gAuth.attachSignin(that.element.nativeElement.firstChild);
-    // }, 100);
     this.gAuth.attachSignin(this.element.nativeElement.firstChild);
   }
 

@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
+import {Http, HttpModule, RequestOptions} from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { GoogleLoginComponent } from './google-login/google-login.component';
@@ -11,6 +11,14 @@ import { LoginPageComponent } from './login-page/login-page.component';
 import {routes} from './app.routes';
 import {AuthGuard} from './guards/auth.guard';
 import {GoogleAuthService} from './google-auth/google-auth.service';
+import {AuthConfig, AuthHttp} from 'angular2-jwt';
+
+export function authHttpServiceFactory(http: Http, options: RequestOptions) {
+  console.log('auth factory function');
+  return new AuthHttp(new AuthConfig({
+    tokenName: 'id_token',
+  }), http, options);
+}
 
 @NgModule({
   declarations: [
@@ -27,7 +35,11 @@ import {GoogleAuthService} from './google-auth/google-auth.service';
       useHash: true
     })
   ],
-  providers: [AuthGuard, GoogleAuthService],
+  providers: [AuthGuard, GoogleAuthService, {
+    provide: AuthHttp,
+    useFactory: authHttpServiceFactory,
+    deps: [Http, RequestOptions]
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
