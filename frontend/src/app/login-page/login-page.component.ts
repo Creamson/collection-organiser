@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthHttp, tokenNotExpired} from 'angular2-jwt';
+import {tokenNotExpired} from 'angular2-jwt';
 import {Router} from '@angular/router';
+import {apiPath} from 'assets/constants';
+import {Http} from '@angular/http';
 
 @Component({
   selector: 'app-login-page',
@@ -9,7 +11,12 @@ import {Router} from '@angular/router';
 })
 export class LoginPageComponent implements OnInit {
 
-  constructor(private router: Router, authHttp: AuthHttp) { }
+  private urlInput = 'greeting';
+  private response: string;
+
+  constructor(private router: Router, public http: Http) {
+    this.response = 'nothing received yet';
+  }
 
   ngOnInit() {
     if (tokenNotExpired('id_token')) {
@@ -17,8 +24,13 @@ export class LoginPageComponent implements OnInit {
     }
   }
 
-  public sendSampleRequest() {
-    // authHttp.
+
+  public sendSampleRequest(service: string) {
+    const url = apiPath + service;
+    this.http.get(url).subscribe(
+      response => this.response = response.text(),
+      error => this.response = 'error: ' + error.text()
+    );
   }
 
 }

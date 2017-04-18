@@ -14,7 +14,6 @@ import {GoogleAuthService} from './google-auth/google-auth.service';
 import {AuthConfig, AuthHttp} from 'angular2-jwt';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
-  console.log('auth factory function');
   return new AuthHttp(new AuthConfig({
     tokenName: 'id_token',
   }), http, options);

@@ -1,4 +1,14 @@
 <p>
   login-page works!
-  <google-login></google-login>
+</p>
+<google-login></google-login>
+<p>
+  <span>
+    <label><b>https://localhost:8443/</b></label>
+    <input [(ngModel)]="urlInput">
+    <button (click)="sendSampleRequest(urlInput)">Try</button>
+  </span>
+</p>
+<p>
+  {{response}}
 </p>
