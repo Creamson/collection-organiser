@@ -12,6 +12,12 @@ import {routes} from './app.routes';
 import {AuthGuard} from './guards/auth.guard';
 import {GoogleAuthService} from './google-auth/google-auth.service';
 import {AuthConfig, AuthHttp} from 'angular2-jwt';
+import {ItemDetailComponent} from './item-detail/item-detail.component';
+import {ItemsComponent} from './items/items.component';
+import {ItemService} from './item.service';
+import {DashboardComponent} from './dashboard/dashboard.component';
+import {AppRoutingModule} from './app-routing.module';
+import {CategoryComponent} from './category/category.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -24,7 +30,11 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     AppComponent,
     GoogleLoginComponent,
     HomeComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    ItemDetailComponent,
+    ItemsComponent,
+    DashboardComponent,
+    CategoryComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,13 +42,14 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     HttpModule,
     RouterModule.forRoot(routes, {
       useHash: true
-    })
+    }),
+    AppRoutingModule
   ],
   providers: [AuthGuard, GoogleAuthService, {
     provide: AuthHttp,
     useFactory: authHttpServiceFactory,
     deps: [Http, RequestOptions]
-  }],
+  }, ItemService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

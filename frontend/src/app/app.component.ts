@@ -7,7 +7,5 @@ import { Component } from '@angular/core';
 })
 
 export class AppComponent {
-  title = 'app works!';
-  list = ['1', '2', '3'];
-
+  title = 'Collections organiser';
 }
