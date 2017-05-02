@@ -1,0 +1,28 @@
+<h2>
+  <!--Items of category: {{category.name}}-->
+
+  <div *ngIf="category">
+    {{category.name}}
+  </div>
+</h2>
+<div *ngIf="selectedItem">
+  <h2>
+    {{selectedItem.name | uppercase}} is my favourite item
+  </h2>
+  <button (click)="gotoDetail()">View Details</button>
+</div>
+
+<h3>
+  <ul class="items">
+    <li *ngFor="let item of items"
+        (click)="onSelect(item)"
+        [class.selected]="item === selectedItem">
+    <span class="badge">
+      <label>id: </label>{{item.id}}
+    </span>
+      <label>name: </label>{{item.name}}
+    </li>
+  </ul>
+
+</h3>
+<button (click)="goBack()">Back</button>
