@@ -1,4 +1,4 @@
-package hello;
+package pl.edu.agh.collectionOrganiser.hello;
 
 public class Greeting {
 

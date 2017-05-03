@@ -1,4 +1,4 @@
-package utils;
+package pl.edu.agh.collectionOrganiser.utils;
 
 import javax.naming.AuthenticationException;
 
