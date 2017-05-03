@@ -16,7 +16,6 @@ import {ItemDetailComponent} from './item-detail/item-detail.component';
 import {ItemsComponent} from './items/items.component';
 import {ItemService} from './item.service';
 import {DashboardComponent} from './dashboard/dashboard.component';
-import {AppRoutingModule} from './app-routing.module';
 import {CategoryComponent} from './category/category.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -42,8 +41,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     HttpModule,
     RouterModule.forRoot(routes, {
       useHash: true
-    }),
-    AppRoutingModule
+    })
   ],
   providers: [AuthGuard, GoogleAuthService, {
     provide: AuthHttp,

@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ITEMS} from './mock-items';
 import {CATEGORIES} from './mock-categories';
-import {Item} from "./item";
-import {Category} from "./category";
+import {Item} from './item';
+import {Category} from './category';
 
 @Injectable()
 export class ItemService {

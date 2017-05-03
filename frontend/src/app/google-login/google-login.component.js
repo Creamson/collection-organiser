@@ -11,43 +11,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var client_info_1 = require("../../assets/client-info");
+var router_1 = require("@angular/router");
+var http_1 = require("@angular/http");
+require("rxjs/add/operator/map");
+var google_auth_service_1 = require("../google-auth/google-auth.service");
 var GoogleLoginComponent = (function () {
-    function GoogleLoginComponent(element) {
+    function GoogleLoginComponent(element, router, http, gAuth) {
         this.element = element;
-        this.scope = [
-            'profile',
-            'email'
-        ].join(' ');
-        console.log('ElementRef: ', this.element);
+        this.router = router;
+        this.http = http;
+        this.gAuth = gAuth;
         this.clientId = client_info_1.CLIENT_ID;
     }
-    GoogleLoginComponent.prototype.googleInit = function () {
-        var that = this;
-        gapi.load('auth2', function () {
-            that.auth2 = gapi.auth2.init({
-                client_id: that.clientId,
-                cookiepolicy: 'single_host_origin',
-                scope: that.scope
-            });
-            that.attachSignin(that.element.nativeElement.firstChild);
-        });
-    };
-    GoogleLoginComponent.prototype.attachSignin = function (element) {
-        var that = this;
-        this.auth2.attachClickHandler(element, {}, function (googleUser) {
-            var profile = googleUser.getBasicProfile();
-            console.log('Token || ' + googleUser.getAuthResponse().id_token);
-            console.log('ID: ' + profile.getId());
-            console.log('Name: ' + profile.getName());
-            console.log('Image URL: ' + profile.getImageUrl());
-            console.log('Email: ' + profile.getEmail());
-            // YOUR CODE HERE
-        }, function (error) {
-            console.log(JSON.stringify(error, undefined, 2));
-        });
-    };
     GoogleLoginComponent.prototype.ngAfterViewInit = function () {
-        this.googleInit();
+        var that = this;
+        this.gAuth.attachSignin(this.element.nativeElement.firstChild);
+    };
+    GoogleLoginComponent.prototype.getTokenValidityReponse = function (token) {
+        return this.http.get('https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=' + token)
+            .map(function (res) { return res.json(); })
+            .subscribe(function (output) { return console.log(output); });
     };
     return GoogleLoginComponent;
 }());
@@ -57,7 +40,7 @@ GoogleLoginComponent = __decorate([
         templateUrl: './google-login.component.html',
         styleUrls: ['./google-login.component.css']
     }),
-    __metadata("design:paramtypes", [core_1.ElementRef])
+    __metadata("design:paramtypes", [core_1.ElementRef, router_1.Router, http_1.Http, google_auth_service_1.GoogleAuthService])
 ], GoogleLoginComponent);
 exports.GoogleLoginComponent = GoogleLoginComponent;
 //# sourceMappingURL=google-login.component.js.map

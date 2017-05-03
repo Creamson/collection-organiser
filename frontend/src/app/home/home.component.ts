@@ -20,7 +20,6 @@ export class HomeComponent implements OnInit {
     this.id_token = localStorage.getItem('id_token');
     const jwtHelper = new JwtHelper();
     this.decodedJwt = jwtHelper.decodeToken(this.id_token);
-    console.log(this.decodedJwt);
     this.response = 'nothing received yet';
   }
 
