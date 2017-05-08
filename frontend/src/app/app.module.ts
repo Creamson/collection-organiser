@@ -21,6 +21,11 @@ import {CategoryComponent} from './category/category.component';
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
     tokenName: 'id_token',
+    globalHeaders: [{
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'http://localhost:8080',
+      'Accept': 'application/json'
+    }]
   }), http, options);
 }
 

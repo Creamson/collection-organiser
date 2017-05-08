@@ -4,10 +4,11 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.mongodb.MongoClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.agh.collectionOrganiser.model.Collection;
+import pl.edu.agh.collectionOrganiser.mongoRepos.CollectionRepository;
 import pl.edu.agh.collectionOrganiser.utils.TokenExtractor;
 
 import javax.annotation.Resource;
@@ -17,7 +18,7 @@ import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 public class CollectionController {
@@ -28,7 +29,7 @@ public class CollectionController {
     private String CLIENT_ID;
 
     @Resource
-    MongoClient mongoClient;
+    private CollectionRepository collectionRepository;
     private GoogleIdTokenVerifier verifier;
 
     public CollectionController() throws IOException {
@@ -50,6 +51,45 @@ public class CollectionController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No valid authentication provided.");
         }
+    }
+
+    @CrossOrigin
+    @RequestMapping(method=GET, path="/collections")
+    public ResponseEntity getCollections(){
+        Collection testCollection = new Collection("Books");
+        this.collectionRepository.insert(testCollection);
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("");
+    }
+
+    @CrossOrigin
+    @RequestMapping(method=POST, path="/collections")
+    public ResponseEntity createCollection(@RequestHeader(value="Authorization") String authHeader,
+                                           @RequestBody Collection toCreate){
+        try {
+            GoogleIdToken idToken = verifyAndGetToken(authHeader);
+            GoogleIdToken.Payload payload = idToken.getPayload();
+            String userID = payload.getSubject();
+            toCreate.setOwnerID(userID);
+            this.collectionRepository.insert(toCreate);
+
+        } catch (AuthenticationException | GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No valid authentication provided.");
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @CrossOrigin
+    @RequestMapping(method=PUT, path="/collections")
+    public ResponseEntity editCollection(){
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("");
+    }
+
+    @CrossOrigin
+    @RequestMapping(method=DELETE, path="/collections")
+    public ResponseEntity deleteCollection(){
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("");
     }
 
     private GoogleIdToken verifyAndGetToken(String authHeader) throws AuthenticationException, GeneralSecurityException, IOException {

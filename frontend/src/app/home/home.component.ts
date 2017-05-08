@@ -14,7 +14,8 @@ export class HomeComponent implements OnInit {
   private id_token: string;
   private decodedJwt: string;
   private response: string;
-  private urlInput = 'greeting';
+  public urlInput = 'collections';
+  public requestBody = '{"name": "Movies"}';
 
   constructor(public gAuth: GoogleAuthService, public authHttp: AuthHttp) {
     this.id_token = localStorage.getItem('id_token');
@@ -29,7 +30,8 @@ export class HomeComponent implements OnInit {
 
   public sendSampleRequest(service: string) {
     const url = apiPath + service;
-    this.authHttp.get(url).subscribe(
+
+    this.authHttp.post(url, this.requestBody).subscribe(
       response => this.response = response.text(),
       error => this.response = 'error: ' + error.text()
     );

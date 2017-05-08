@@ -17,7 +17,8 @@ var HomeComponent = (function () {
     function HomeComponent(gAuth, authHttp) {
         this.gAuth = gAuth;
         this.authHttp = authHttp;
-        this.urlInput = 'greeting';
+        this.urlInput = 'collections';
+        this.requestBody = '{"name": "Movies"}';
         this.id_token = localStorage.getItem('id_token');
         var jwtHelper = new angular2_jwt_1.JwtHelper();
         this.decodedJwt = jwtHelper.decodeToken(this.id_token);
@@ -29,7 +30,7 @@ var HomeComponent = (function () {
     HomeComponent.prototype.sendSampleRequest = function (service) {
         var _this = this;
         var url = constants_1.apiPath + service;
-        this.authHttp.get(url).subscribe(function (response) { return _this.response = response.text(); }, function (error) { return _this.response = 'error: ' + error.text(); });
+        this.authHttp.post(url, this.requestBody).subscribe(function (response) { return _this.response = response.text(); }, function (error) { return _this.response = 'error: ' + error.text(); });
     };
     HomeComponent.prototype.ngOnInit = function () {
     };
