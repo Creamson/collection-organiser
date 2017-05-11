@@ -7,29 +7,31 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.ArrayList;
 import java.util.List;
 
-@CompoundIndex(name="unique_collection_name_per_user", unique = true, def="{'ownerID' : 1, 'name' : 1}")
+@CompoundIndex(name="unique_collection_name_per_user", unique = true, def="{'ownerId' : 1, 'name' : 1}")
 @Document(collection = "collections")
 public class Collection {
 
     @Id
     private String id;
-    private String ownerID;
+    private String ownerId;
     private String name;
     private List<CollectionItem> items;
 
-    public Collection(){}
+    public Collection(){
+        this.items = new ArrayList<>();
+    }
 
     public Collection(String name){
         this.name = name;
         this.items = new ArrayList<>();
     }
 
-    public String getOwnerID() {
-        return ownerID;
+    public String getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwnerID(String ownerID) {
-        this.ownerID = ownerID;
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 
     public List<CollectionItem> getItems() {
@@ -54,5 +56,9 @@ public class Collection {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void update(Collection updatedCollection) {
+        this.name = updatedCollection.name;
     }
 }
