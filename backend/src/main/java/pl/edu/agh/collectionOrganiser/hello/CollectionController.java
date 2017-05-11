@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import javax.naming.AuthenticationException;
 import java.io.*;
 import java.security.GeneralSecurityException;
+import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -49,15 +50,31 @@ public class CollectionController {
     }
 
     @CrossOrigin
+    @RequestMapping(method = GET, path = "/collections")
+    public ResponseEntity getCollections(@RequestHeader(value = "Authorization") String authHeader) {
+        try {
+            GoogleIdToken idToken = verifyAndGetToken(authHeader);
+            GoogleIdToken.Payload payload = idToken.getPayload();
+            String userID = payload.getSubject();
+            List<Collection> collections = this.collectionRepository.findAllByOwnerId(userID);
+
+            return ResponseEntity.status(HttpStatus.OK).body(collections);
+
+        } catch (AuthenticationException | GeneralSecurityException | IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No valid authentication provided.");
+        }
+    }
+
+    @CrossOrigin
     @RequestMapping(method = GET, path = "/collections/{collectionName}")
-    public ResponseEntity getCollections(@RequestHeader(value = "Authorization") String authHeader,
+    public ResponseEntity getCollection(@RequestHeader(value = "Authorization") String authHeader,
                                          @PathVariable String collectionName) {
         try {
             GoogleIdToken idToken = verifyAndGetToken(authHeader);
             GoogleIdToken.Payload payload = idToken.getPayload();
             String userID = payload.getSubject();
             Collection requestedCollection = this.collectionRepository.findByOwnerIdAndName(userID, collectionName);
-            System.out.println(userID + " " + collectionName);
             if (requestedCollection != null) {
                 return ResponseEntity.status(HttpStatus.OK).body(requestedCollection);
             }
