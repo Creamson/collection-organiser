@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import pl.edu.agh.collectionOrganiser.utils.TokenExtractor;
 
 import java.io.*;
 import java.net.UnknownHostException;
@@ -50,6 +51,11 @@ public class AppConfig {
                 .Builder(new NetHttpTransport(), new JacksonFactory())
                 .setAudience(Collections.singletonList(clientID))
                 .build();
+    }
+
+    @Bean
+    public TokenExtractor tokenExtractor() {
+        return new TokenExtractor();
     }
 
     private String fetchClientID() throws IOException {
