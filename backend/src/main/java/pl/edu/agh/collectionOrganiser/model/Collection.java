@@ -1,8 +1,10 @@
 package pl.edu.agh.collectionOrganiser.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
+import pl.edu.agh.collectionOrganiser.config.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,7 @@ public class Collection {
         this.ownerId = ownerId;
     }
 
+    @JsonView(View.DetailedData.class)
     public List<CollectionItem> getItems() {
         return items;
     }
@@ -42,6 +45,7 @@ public class Collection {
         this.items = items;
     }
 
+    @JsonView({View.GeneralData.class, View.DetailedData.class})
     public String getName() {
         return name;
     }

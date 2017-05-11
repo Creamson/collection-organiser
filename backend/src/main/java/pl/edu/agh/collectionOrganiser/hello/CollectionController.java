@@ -1,10 +1,12 @@
 package pl.edu.agh.collectionOrganiser.hello;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.agh.collectionOrganiser.config.View;
 import pl.edu.agh.collectionOrganiser.model.Collection;
 import pl.edu.agh.collectionOrganiser.mongoRepos.CollectionRepository;
 import pl.edu.agh.collectionOrganiser.utils.TokenExtractor;
@@ -49,6 +51,7 @@ public class CollectionController {
 
     }
 
+    @JsonView(View.GeneralData.class)
     @CrossOrigin
     @RequestMapping(method = GET, path = "/collections")
     public ResponseEntity getCollections(@RequestHeader(value = "Authorization") String authHeader) {
@@ -66,6 +69,7 @@ public class CollectionController {
         }
     }
 
+    @JsonView(View.DetailedData.class)
     @CrossOrigin
     @RequestMapping(method = GET, path = "/collections/{collectionName}")
     public ResponseEntity getCollection(@RequestHeader(value = "Authorization") String authHeader,
