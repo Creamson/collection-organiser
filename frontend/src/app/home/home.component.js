@@ -27,10 +27,25 @@ var HomeComponent = (function () {
     HomeComponent.prototype.googleSignOut = function () {
         this.gAuth.googleSignOut();
     };
-    HomeComponent.prototype.sendSampleRequest = function (service) {
+    HomeComponent.prototype.sendGetRequest = function (service) {
+        var _this = this;
+        var url = constants_1.apiPath + service;
+        this.authHttp.get(url, this.requestBody).subscribe(function (response) { return _this.response = response.text(); }, function (error) { return _this.response = 'error: ' + error.text(); });
+    };
+    HomeComponent.prototype.sendPostRequest = function (service) {
         var _this = this;
         var url = constants_1.apiPath + service;
         this.authHttp.post(url, this.requestBody).subscribe(function (response) { return _this.response = response.text(); }, function (error) { return _this.response = 'error: ' + error.text(); });
+    };
+    HomeComponent.prototype.sendPutRequest = function (service) {
+        var _this = this;
+        var url = constants_1.apiPath + service;
+        this.authHttp.put(url, this.requestBody).subscribe(function (response) { return _this.response = response.text(); }, function (error) { return _this.response = 'error: ' + error.text(); });
+    };
+    HomeComponent.prototype.sendDeleteRequest = function (service) {
+        var _this = this;
+        var url = constants_1.apiPath + service;
+        this.authHttp.delete(url, this.requestBody).subscribe(function (response) { return _this.response = response.text(); }, function (error) { return _this.response = 'error: ' + error.text(); });
     };
     HomeComponent.prototype.ngOnInit = function () {
     };

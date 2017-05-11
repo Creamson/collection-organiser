@@ -6,7 +6,10 @@
   <span>
     <label><b>https://localhost:8443/</b></label>
     <input [(ngModel)]="urlInput">
-    <button (click)="sendSampleRequest(urlInput)">Try</button>
+    <button (click)="sendPostRequest(urlInput)">Post</button>
+    <button (click)="sendGetRequest(urlInput)">Get</button>
+    <button (click)="sendPutRequest(urlInput)">Put</button>
+    <button (click)="sendDeleteRequest(urlInput)">Delete</button>
   </span>
 </p>
 <p>

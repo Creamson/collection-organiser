@@ -28,10 +28,37 @@ export class HomeComponent implements OnInit {
     this.gAuth.googleSignOut();
   }
 
-  public sendSampleRequest(service: string) {
+  public sendGetRequest(service: string) {
+    const url = apiPath + service;
+
+    this.authHttp.get(url, this.requestBody).subscribe(
+      response => this.response = response.text(),
+      error => this.response = 'error: ' + error.text()
+    );
+  }
+
+  public sendPostRequest(service: string) {
     const url = apiPath + service;
 
     this.authHttp.post(url, this.requestBody).subscribe(
+      response => this.response = response.text(),
+      error => this.response = 'error: ' + error.text()
+    );
+  }
+
+  public sendPutRequest(service: string) {
+    const url = apiPath + service;
+
+    this.authHttp.put(url, this.requestBody).subscribe(
+      response => this.response = response.text(),
+      error => this.response = 'error: ' + error.text()
+    );
+  }
+
+  public sendDeleteRequest(service: string) {
+    const url = apiPath + service;
+
+    this.authHttp.delete(url, this.requestBody).subscribe(
       response => this.response = response.text(),
       error => this.response = 'error: ' + error.text()
     );
