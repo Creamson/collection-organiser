@@ -1,6 +1,7 @@
 package pl.edu.agh.collectionOrganiser.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,8 +9,11 @@ import pl.edu.agh.collectionOrganiser.config.View;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@CompoundIndex(name="unique_collection_name_per_user", unique = true, def="{'ownerId' : 1, 'name' : 1}")
+@CompoundIndex(name = "unique_collection_name_per_user", unique = true, def = "{'ownerId' : 1, 'name' : 1}")
 @Document(collection = "collections")
 public class Collection {
 
@@ -19,11 +23,11 @@ public class Collection {
     private String name;
     private List<CollectionItem> items;
 
-    public Collection(){
+    public Collection() {
         this.items = new ArrayList<>();
     }
 
-    public Collection(String name){
+    public Collection(String name) {
         this.name = name;
         this.items = new ArrayList<>();
     }
@@ -65,4 +69,30 @@ public class Collection {
     public void update(Collection updatedCollection) {
         this.name = updatedCollection.name;
     }
+
+    public void addItem(CollectionItem item) {
+        if (!containsItem(item)) {
+            this.getItems().add(item);
+        } else {
+            throw new DuplicateKeyException("Item " + item.getName() + " already exists in this collection.");
+        }
+    }
+
+    private boolean containsItem(CollectionItem item) {
+        Set<String> itemNames = this.getItems()
+                .stream()
+                .map(CollectionItem::getName)
+                .collect(Collectors.toSet());
+        return itemNames.contains(item.getName());
+    }
+
+    public Optional<CollectionItem> getItemByName(String name) {
+        return this.getItems().stream().filter(e -> e.getName().equals(name)).findFirst();
+    }
+
+    public void remove(String name) {
+        Optional<CollectionItem> item = this.getItemByName(name);
+        item.ifPresent(i -> this.getItems().remove(i));
+    }
+
 }

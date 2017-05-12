@@ -20,11 +20,12 @@ import java.util.Collections;
 @Configuration
 public class AppConfig {
 
-    public @Bean
+    public
+    @Bean
     MongoTemplate mongoTemplate() throws Exception {
 
         MongoTemplate mongoTemplate =
-                new MongoTemplate(new MongoClient("127.0.0.1"),"collectionOrganiser");
+                new MongoTemplate(new MongoClient("127.0.0.1"), "collectionOrganiser");
         return mongoTemplate;
 
     }

@@ -1,15 +1,17 @@
 package pl.edu.agh.collectionOrganiser.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.mongodb.core.mapping.Document;
+import pl.edu.agh.collectionOrganiser.config.View;
 
 @Document
 public class CollectionItem {
 
     private String name;
-    private boolean todo=false;
-    private int rating=0;
+    private boolean todo = false;
+    private int rating = 0;
 
-
+    @JsonView(View.DetailedData.class)
     public String getName() {
         return name;
     }
@@ -18,6 +20,7 @@ public class CollectionItem {
         this.name = name;
     }
 
+    @JsonView(View.DetailedData.class)
     public boolean isTodo() {
         return todo;
     }
@@ -26,11 +29,18 @@ public class CollectionItem {
         this.todo = todo;
     }
 
+    @JsonView(View.DetailedData.class)
     public int getRating() {
         return rating;
     }
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public void update(CollectionItem item) {
+        this.setName(item.getName());
+        this.setRating(item.getRating());
+        this.setTodo(item.isTodo());
     }
 }
