@@ -12,18 +12,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var client_info_1 = require("../../assets/client-info");
 var router_1 = require("@angular/router");
+var url = 'https://apis.google.com/js/platform.js?onload=__onGoogleLoaded';
 var GoogleAuthService = (function () {
     function GoogleAuthService(router) {
+        var _this = this;
         this.router = router;
         this.clientId = client_info_1.CLIENT_ID;
+        this.loadAPI = new Promise(function (resolve) {
+            window['__onGoogleLoaded'] = function (ev) {
+                console.log('gapi loaded');
+                resolve(gapi);
+            };
+            _this.loadScript();
+        });
         this.init();
     }
     GoogleAuthService.prototype.init = function () {
         var that = this;
-        gapi.load('auth2', function () {
-            that.auth2 = gapi.auth2.init({
-                client_id: that.clientId,
-                cookiepolicy: 'single_host_origin'
+        this.loadAPI.then(function () {
+            gapi.load('auth2', function () {
+                that.auth2 = gapi.auth2.init({
+                    client_id: that.clientId,
+                    cookiepolicy: 'single_host_origin'
+                });
             });
         });
     };
@@ -68,6 +79,13 @@ var GoogleAuthService = (function () {
             that.router.navigate(['']);
         };
         this.waitTillAuthInitialized(signoutFun);
+    };
+    GoogleAuthService.prototype.loadScript = function () {
+        console.log('loading..');
+        var node = document.createElement('script');
+        node.src = url;
+        node.type = 'text/javascript';
+        document.getElementsByTagName('head')[0].appendChild(node);
     };
     return GoogleAuthService;
 }());

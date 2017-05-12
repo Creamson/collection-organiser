@@ -3,6 +3,7 @@ import {CLIENT_ID} from '../../assets/client-info';
 import {Router} from '@angular/router';
 
 declare const gapi: any;
+const url = 'https://apis.google.com/js/platform.js?onload=__onGoogleLoaded';
 
 @Injectable()
 export class GoogleAuthService {
@@ -11,12 +12,16 @@ export class GoogleAuthService {
 
   public auth2: any;
 
+  private loadAPI: Promise<any>;
+
   public init() {
     const that = this;
-    gapi.load('auth2', function () {
-      that.auth2 = gapi.auth2.init({
-        client_id: that.clientId,
-        cookiepolicy: 'single_host_origin'
+    this.loadAPI.then(() => {
+      gapi.load('auth2', () => {
+        that.auth2 = gapi.auth2.init({
+          client_id: that.clientId,
+          cookiepolicy: 'single_host_origin'
+        });
       });
     });
   }
@@ -56,7 +61,7 @@ export class GoogleAuthService {
 
   public googleSignOut() {
     const that = this;
-    const signoutFun = function() {
+    const signoutFun = function () {
       that.auth2.signOut().then(function () {
         console.log('User signed out.');
       });
@@ -68,7 +73,24 @@ export class GoogleAuthService {
 
   constructor(private router: Router) {
     this.clientId = CLIENT_ID;
+
+    this.loadAPI = new Promise((resolve) => {
+      window['__onGoogleLoaded'] = (ev) => {
+        console.log('gapi loaded');
+        resolve(gapi);
+      };
+      this.loadScript();
+    });
     this.init();
+  }
+
+  private loadScript() {
+    console.log('loading..');
+    const node = document.createElement('script');
+    node.src = url;
+    node.type = 'text/javascript';
+    document.getElementsByTagName('head')[0].appendChild(node);
+
   }
 
 
