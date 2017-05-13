@@ -15,49 +15,29 @@ var router_1 = require("@angular/router");
 var url = 'https://apis.google.com/js/platform.js?onload=__onGoogleLoaded';
 var GoogleAuthService = (function () {
     function GoogleAuthService(router) {
-        var _this = this;
         this.router = router;
         this.clientId = client_info_1.CLIENT_ID;
-        this.loadAPI = new Promise(function (resolve) {
-            window['__onGoogleLoaded'] = function (ev) {
-                console.log('gapi loaded');
-                resolve(gapi);
-            };
-            _this.loadScript();
-        });
-        this.init();
+        this.initAuth2();
     }
-    GoogleAuthService.prototype.init = function () {
+    GoogleAuthService.prototype.initAuth2 = function () {
+        var _this = this;
         var that = this;
-        this.loadAPI.then(function () {
-            gapi.load('auth2', function () {
-                that.auth2 = gapi.auth2.init({
-                    client_id: that.clientId,
-                    cookiepolicy: 'single_host_origin'
+        this.loadAPIPromise = new Promise(function (resolve) {
+            window['__onGoogleLoaded'] = function () {
+                gapi.load('auth2', function () {
+                    that.auth2 = gapi.auth2.init({
+                        client_id: that.clientId,
+                        cookiepolicy: 'single_host_origin'
+                    });
+                    resolve();
                 });
-            });
+            };
+            _this.loadGapiScript();
         });
-    };
-    GoogleAuthService.prototype.waitTillAuthInitialized = function (funToExecute, retries) {
-        if (retries === void 0) { retries = 10; }
-        var that = this;
-        if (this.auth2 == null) {
-            setTimeout(function () {
-                if (retries > 0) {
-                    that.waitTillAuthInitialized(funToExecute, retries - 1);
-                }
-                else {
-                    console.log('Failed to execute function - initialization took too long.');
-                }
-            }, 100);
-        }
-        else {
-            funToExecute();
-        }
     };
     GoogleAuthService.prototype.attachSignin = function (element) {
         var that = this;
-        var attachFun = function () {
+        this.loadAPIPromise.then(function () {
             that.auth2.attachClickHandler(element, {}, function (googleUser) {
                 // const profile = googleUser.getBasicProfile();
                 var id_token = googleUser.getAuthResponse().id_token;
@@ -66,22 +46,19 @@ var GoogleAuthService = (function () {
             }, function (error) {
                 console.log(JSON.stringify(error, undefined, 2));
             });
-        };
-        this.waitTillAuthInitialized(attachFun);
+        });
     };
     GoogleAuthService.prototype.googleSignOut = function () {
         var that = this;
-        var signoutFun = function () {
+        this.loadAPIPromise.then(function () {
             that.auth2.signOut().then(function () {
                 console.log('User signed out.');
             });
             localStorage.removeItem('id_token');
             that.router.navigate(['']);
-        };
-        this.waitTillAuthInitialized(signoutFun);
+        });
     };
-    GoogleAuthService.prototype.loadScript = function () {
-        console.log('loading..');
+    GoogleAuthService.prototype.loadGapiScript = function () {
         var node = document.createElement('script');
         node.src = url;
         node.type = 'text/javascript';
