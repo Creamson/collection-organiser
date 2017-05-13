@@ -140,10 +140,18 @@ public class CollectionController {
             Collection collection = this.collectionRepository.findByOwnerIdAndName(userID, collectionName);
             if (collection != null) {
                 Optional<CollectionItem> toUpdate = collection.getItemByName(itemName);
-                toUpdate.ifPresent(i -> i.update(item));
+                if(toUpdate.isPresent()) {
+                    Optional<CollectionItem> duplicate = collection.getItemByName(item.getName());
+                    if (!duplicate.isPresent()) {
+                        toUpdate.get().update(item);
 
-                this.collectionRepository.save(collection);
-                return ResponseEntity.status(HttpStatus.OK).build();
+                        this.collectionRepository.save(collection);
+                        return ResponseEntity.status(HttpStatus.OK).build();
+
+                    }
+                    return ResponseEntity.status(HttpStatus.CONFLICT).body("Item already exists");
+                }
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found");
             }
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found");
         });
