@@ -1,4 +1,4 @@
-package pl.edu.agh.collectionOrganiser.config;
+package pl.edu.agh.collection_organiser.config;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import pl.edu.agh.collectionOrganiser.utils.TokenExtractor;
+import pl.edu.agh.collection_organiser.utils.TokenExtractor;
 
 import java.io.*;
-import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 @Configuration
@@ -23,11 +23,7 @@ public class AppConfig {
     public
     @Bean
     MongoTemplate mongoTemplate() throws Exception {
-
-        MongoTemplate mongoTemplate =
-                new MongoTemplate(new MongoClient("127.0.0.1"), "collectionOrganiser");
-        return mongoTemplate;
-
+        return new MongoTemplate(new MongoClient("127.0.0.1"), "collectionOrganiser");
     }
 
     @Bean
@@ -62,6 +58,10 @@ public class AppConfig {
     private String fetchClientID() throws IOException {
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("client-info").getFile());
-        return new BufferedReader(new InputStreamReader(new FileInputStream(file))).readLine();
+
+        try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))){
+            return reader.readLine();
+        }
+
     }
 }

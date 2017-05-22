@@ -1,4 +1,4 @@
-package pl.edu.agh.collectionOrganiser;
+package pl.edu.agh.collection_organiser;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,7 +1,7 @@
-package pl.edu.agh.collectionOrganiser.mongoRepos;
+package pl.edu.agh.collection_organiser.mongoRepos;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import pl.edu.agh.collectionOrganiser.model.Collection;
+import pl.edu.agh.collection_organiser.model.Collection;
 
 import java.util.List;
 

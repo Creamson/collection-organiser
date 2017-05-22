@@ -1,15 +1,15 @@
-package pl.edu.agh.collectionOrganiser.model;
+package pl.edu.agh.collection_organiser.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.data.mongodb.core.mapping.Document;
-import pl.edu.agh.collectionOrganiser.config.View;
+import pl.edu.agh.collection_organiser.config.View;
 
 @Document
 public class CollectionItem {
 
     private String name;
-    private boolean todo = false;
-    private int rating = 0;
+    private boolean todo;
+    private int rating;
 
     @JsonView(View.DetailedData.class)
     public String getName() {

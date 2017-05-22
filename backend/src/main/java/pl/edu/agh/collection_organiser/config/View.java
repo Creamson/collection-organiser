@@ -1,4 +1,4 @@
-package pl.edu.agh.collectionOrganiser.config;
+package pl.edu.agh.collection_organiser.config;
 
 public class View {
     public interface GeneralData {}

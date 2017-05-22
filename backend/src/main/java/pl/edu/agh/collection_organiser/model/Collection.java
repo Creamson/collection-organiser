@@ -1,11 +1,11 @@
-package pl.edu.agh.collectionOrganiser.model;
+package pl.edu.agh.collection_organiser.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
-import pl.edu.agh.collectionOrganiser.config.View;
+import pl.edu.agh.collection_organiser.config.View;
 
 import java.util.ArrayList;
 import java.util.List;

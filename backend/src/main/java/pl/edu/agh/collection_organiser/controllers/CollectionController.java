@@ -1,4 +1,4 @@
-package pl.edu.agh.collectionOrganiser.hello;
+package pl.edu.agh.collection_organiser.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -7,11 +7,11 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.agh.collectionOrganiser.config.View;
-import pl.edu.agh.collectionOrganiser.model.Collection;
-import pl.edu.agh.collectionOrganiser.model.CollectionItem;
-import pl.edu.agh.collectionOrganiser.mongoRepos.CollectionRepository;
-import pl.edu.agh.collectionOrganiser.utils.TokenExtractor;
+import pl.edu.agh.collection_organiser.config.View;
+import pl.edu.agh.collection_organiser.model.Collection;
+import pl.edu.agh.collection_organiser.model.CollectionItem;
+import pl.edu.agh.collection_organiser.mongoRepos.CollectionRepository;
+import pl.edu.agh.collection_organiser.utils.TokenExtractor;
 
 import javax.annotation.Resource;
 import javax.naming.AuthenticationException;
@@ -182,7 +182,6 @@ public class CollectionController {
             return toExecute.apply(userID);
 
         } catch (AuthenticationException | GeneralSecurityException | IOException e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No valid authentication provided.");
         }
     }
