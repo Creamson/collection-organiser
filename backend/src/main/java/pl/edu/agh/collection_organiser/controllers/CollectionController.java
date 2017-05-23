@@ -142,7 +142,7 @@ public class CollectionController {
                 Optional<CollectionItem> toUpdate = collection.getItemByName(itemName);
                 if(toUpdate.isPresent()) {
                     Optional<CollectionItem> duplicate = collection.getItemByName(item.getName());
-                    if (!duplicate.isPresent()) {
+                    if (!duplicate.isPresent() || duplicate.get().equals(toUpdate.get())) {
                         toUpdate.get().update(item);
 
                         this.collectionRepository.save(collection);
