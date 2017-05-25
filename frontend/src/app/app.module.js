@@ -27,6 +27,11 @@ var category_component_1 = require("./category/category.component");
 function authHttpServiceFactory(http, options) {
     return new angular2_jwt_1.AuthHttp(new angular2_jwt_1.AuthConfig({
         tokenName: 'id_token',
+        globalHeaders: [{
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': 'http://localhost:8080',
+                'Accept': 'application/json'
+            }]
     }), http, options);
 }
 exports.authHttpServiceFactory = authHttpServiceFactory;

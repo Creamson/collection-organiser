@@ -14,7 +14,8 @@ export class HomeComponent implements OnInit {
   private id_token: string;
   private decodedJwt: string;
   private response: string;
-  private urlInput = 'greeting';
+  public urlInput = 'collections';
+  public requestBody = '{"name": "Movies"}';
 
   constructor(public gAuth: GoogleAuthService, public authHttp: AuthHttp) {
     this.id_token = localStorage.getItem('id_token');
@@ -27,9 +28,37 @@ export class HomeComponent implements OnInit {
     this.gAuth.googleSignOut();
   }
 
-  public sendSampleRequest(service: string) {
+  public sendGetRequest(service: string) {
     const url = apiPath + service;
-    this.authHttp.get(url).subscribe(
+
+    this.authHttp.get(url, this.requestBody).subscribe(
+      response => this.response = response.text(),
+      error => this.response = 'error: ' + error.text()
+    );
+  }
+
+  public sendPostRequest(service: string) {
+    const url = apiPath + service;
+
+    this.authHttp.post(url, this.requestBody).subscribe(
+      response => this.response = response.text(),
+      error => this.response = 'error: ' + error.text()
+    );
+  }
+
+  public sendPutRequest(service: string) {
+    const url = apiPath + service;
+
+    this.authHttp.put(url, this.requestBody).subscribe(
+      response => this.response = response.text(),
+      error => this.response = 'error: ' + error.text()
+    );
+  }
+
+  public sendDeleteRequest(service: string) {
+    const url = apiPath + service;
+
+    this.authHttp.delete(url, this.requestBody).subscribe(
       response => this.response = response.text(),
       error => this.response = 'error: ' + error.text()
     );
