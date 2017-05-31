@@ -18,10 +18,16 @@ import {ItemsComponent} from './items/items.component';
 import {ItemService} from './item.service';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {CategoryComponent} from './category/category.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
     tokenName: 'id_token',
+    globalHeaders: [{
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'http://localhost:8080',
+      'Accept': 'application/json'
+    }]
   }), http, options);
 }
 
@@ -35,6 +41,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     ItemsComponent,
     DashboardComponent,
     CategoryComponent,
+    SidebarComponent,
   ],
   imports: [
     BrowserModule,
