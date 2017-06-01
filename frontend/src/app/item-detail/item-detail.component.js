@@ -24,7 +24,7 @@ var ItemDetailComponent = (function () {
     ItemDetailComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.route.params
-            .switchMap(function (params) { return _this.itemService.getItem(+params['id']); })
+            .switchMap(function (params) { return _this.itemService.getItem(params['name']); })
             .subscribe(function (item) { return _this.item = item; });
     };
     ItemDetailComponent.prototype.goBack = function () {

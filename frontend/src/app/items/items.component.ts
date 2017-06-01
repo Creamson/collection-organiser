@@ -31,7 +31,7 @@ export class ItemsComponent implements OnInit{
 
   gotoDetail(): void {
     console.log('ZSA detail' + this.selectedItem.category.name);
-    this.router.navigate(['/detail', this.selectedItem.id]);
+    this.router.navigate(['/detail', this.selectedItem.name]);
   }
 
   gotoCategory(): void {

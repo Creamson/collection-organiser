@@ -39,7 +39,7 @@ var CategoryComponent = (function () {
         this.selectedItem = item;
     };
     CategoryComponent.prototype.gotoDetail = function () {
-        this.router.navigate(['/detail', this.selectedItem.id]);
+        this.router.navigate(['/detail', this.selectedItem.name]);
     };
     CategoryComponent.prototype.goBack = function () {
         this.location.back();

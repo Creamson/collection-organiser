@@ -11,7 +11,7 @@ exports.routes = [
     { path: '', component: login_page_component_1.LoginPageComponent },
     { path: 'home', component: home_component_1.HomeComponent, canActivate: [auth_guard_1.AuthGuard] },
     { path: 'dashboard', component: dashboard_component_1.DashboardComponent },
-    { path: 'detail/:id', component: item_detail_component_1.ItemDetailComponent },
+    { path: 'detail/:name', component: item_detail_component_1.ItemDetailComponent },
     { path: 'category/:name', component: category_component_1.CategoryComponent },
     { path: 'items', component: items_component_1.ItemsComponent },
     { path: '**', component: login_page_component_1.LoginPageComponent }

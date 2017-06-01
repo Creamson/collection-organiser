@@ -41,7 +41,7 @@ export class CategoryComponent implements OnInit {
   }
 
   gotoDetail(): void {
-    this.router.navigate(['/detail', this.selectedItem.id]);
+    this.router.navigate(['/detail', this.selectedItem.name]);
   }
 
   goBack(): void {

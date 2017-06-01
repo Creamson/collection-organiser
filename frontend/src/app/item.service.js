@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var mock_items_1 = require("./mock-items");
+var item_1 = require("./item");
 var category_1 = require("./category");
 var angular2_jwt_1 = require("angular2-jwt");
 var constants_1 = require("../assets/constants");
@@ -26,7 +26,9 @@ var ItemService = (function () {
         this.response = 'nothing received yet';
     }
     ItemService.prototype.getItems = function () {
-        return Promise.resolve(mock_items_1.ITEMS);
+        // todo
+        var category = new category_1.Category("Movies");
+        return this.getItemsOfCategory(category);
     };
     ItemService.prototype.getCategories = function () {
         return Promise.resolve(this.authHttp.get(this.url, this.requestBody).toPromise().then(function (response) {
@@ -39,19 +41,22 @@ var ItemService = (function () {
         }));
     };
     ItemService.prototype.getItemsOfCategory = function (category) {
+        console.log("hej ");
         return Promise.resolve(this.authHttp.get(this.url + "/" + category.name, this.requestBody).toPromise().then(function (response) {
+            console.log(response);
+            var json = response.json().items;
             var items = [];
-            for (var _i = 0, _a = response.json(); _i < _a.length; _i++) {
-                var entry = _a[_i];
-                //items.push(new Item(entry.name));
+            for (var _i = 0, json_1 = json; _i < json_1.length; _i++) {
+                var entry = json_1[_i];
                 console.log(entry);
+                items.push(new item_1.Item(entry.name, entry.rating, entry.todo, category));
             }
             return items;
         }));
     };
-    ItemService.prototype.getItem = function (id) {
+    ItemService.prototype.getItem = function (name) {
         return this.getItems()
-            .then(function (items) { return items.find(function (item) { return item.id === id; }); });
+            .then(function (items) { return items.find(function (item) { return item.name === name; }); });
     };
     ItemService.prototype.getCategory = function (name) {
         return this.getCategories()

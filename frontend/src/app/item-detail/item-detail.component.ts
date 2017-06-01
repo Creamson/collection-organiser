@@ -23,7 +23,7 @@ export class ItemDetailComponent implements OnInit{
 
   ngOnInit(): void {
     this.route.params
-      .switchMap((params: Params) => this.itemService.getItem(+params['id']))
+      .switchMap((params: Params) => this.itemService.getItem(params['name']))
       .subscribe(item => this.item = item);
   }
 

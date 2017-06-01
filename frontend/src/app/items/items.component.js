@@ -29,7 +29,7 @@ var ItemsComponent = (function () {
     };
     ItemsComponent.prototype.gotoDetail = function () {
         console.log('ZSA detail' + this.selectedItem.category.name);
-        this.router.navigate(['/detail', this.selectedItem.id]);
+        this.router.navigate(['/detail', this.selectedItem.name]);
     };
     ItemsComponent.prototype.gotoCategory = function () {
         console.log('ZSA category' + this.selectedItem.category.name);

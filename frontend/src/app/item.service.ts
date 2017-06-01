@@ -1,5 +1,4 @@
 import {Injectable, OnInit} from "@angular/core";
-import {ITEMS} from "./mock-items";
 import {Item} from "./item";
 import {Category} from "./category";
 import {AuthHttp, JwtHelper} from "angular2-jwt";
@@ -24,7 +23,9 @@ export class ItemService implements OnInit {
   }
 
   getItems(): Promise<Item[]> {
-    return Promise.resolve(ITEMS);
+    // todo
+    var category: Category = new Category("Movies");
+    return this.getItemsOfCategory(category);
   }
 
   getCategories(): Promise<Category[]> {
@@ -41,21 +42,25 @@ export class ItemService implements OnInit {
   }
 
   getItemsOfCategory(category: Category): Promise<Item[]> {
+    console.log("hej ");
     return Promise.resolve(this.authHttp.get(this.url + "/" + category.name, this.requestBody).toPromise().then(
       response => {
+        console.log(response);
+        var json = response.json().items;
         let items: Item[] = [];
-        for (let entry of response.json()) {
-          //items.push(new Item(entry.name));
+        for (let entry of json) {
           console.log(entry);
+          items.push(new Item(entry.name, entry.rating as number, entry.todo as boolean, category));
+
         }
         return items;
       }
     ));
   }
 
-  getItem(id: number): Promise<Item> {
+  getItem(name: string): Promise<Item> {
     return this.getItems()
-      .then(items => items.find(item => item.id === id));
+      .then(items => items.find(item => item.name === name));
   }
 
   getCategory(name: string): Promise<Category> {
