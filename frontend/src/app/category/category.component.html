@@ -8,9 +8,8 @@
 </h2>
 <div *ngIf="selectedItem">
   <h2>
-    {{selectedItem.name | uppercase}} is my favourite item
+    You are editing {{selectedItem.name | uppercase}}
   </h2>
-  <button (click)="gotoDetail()">View Details</button>
 </div>
 
 <h3>
@@ -19,9 +18,14 @@
         (click)="onSelect(item)"
         [class.selected]="item === selectedItem">
     <span class="badge">
-      <label>id: </label>{{item.id}}
+      <label>{{item.name}}</label>
     </span>
-      <label>name: </label>{{item.name}}
+      <label>todo:
+        <input type="checkbox" [checked]="item.todo" (change)="item.todo = !item.todo"/>
+      </label>
+      <label *ngIf="!item.todo"> rating:
+        <input [(ngModel)]="item.rating" placeholder="rating">
+      </label>
     </li>
   </ul>
 

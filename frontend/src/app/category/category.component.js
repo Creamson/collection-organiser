@@ -38,9 +38,6 @@ var CategoryComponent = (function () {
     CategoryComponent.prototype.onSelect = function (item) {
         this.selectedItem = item;
     };
-    CategoryComponent.prototype.gotoDetail = function () {
-        this.router.navigate(['/detail', this.selectedItem.name]);
-    };
     CategoryComponent.prototype.goBack = function () {
         this.location.back();
     };
