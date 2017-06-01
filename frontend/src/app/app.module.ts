@@ -13,7 +13,6 @@ import {routes} from './app.routes';
 import {AuthGuard} from './guards/auth.guard';
 import {GoogleAuthService} from './google-auth/google-auth.service';
 import {AuthConfig, AuthHttp} from 'angular2-jwt';
-import {ItemDetailComponent} from './item-detail/item-detail.component';
 import {ItemService} from './item.service';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {CategoryComponent} from './category/category.component';
@@ -36,7 +35,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     GoogleLoginComponent,
     HomeComponent,
     LoginPageComponent,
-    ItemDetailComponent,
     DashboardComponent,
     CategoryComponent,
     SidebarComponent,

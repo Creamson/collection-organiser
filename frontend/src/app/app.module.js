@@ -19,7 +19,6 @@ var app_routes_1 = require("./app.routes");
 var auth_guard_1 = require("./guards/auth.guard");
 var google_auth_service_1 = require("./google-auth/google-auth.service");
 var angular2_jwt_1 = require("angular2-jwt");
-var item_detail_component_1 = require("./item-detail/item-detail.component");
 var item_service_1 = require("./item.service");
 var dashboard_component_1 = require("./dashboard/dashboard.component");
 var category_component_1 = require("./category/category.component");
@@ -47,7 +46,6 @@ AppModule = __decorate([
             google_login_component_1.GoogleLoginComponent,
             home_component_1.HomeComponent,
             login_page_component_1.LoginPageComponent,
-            item_detail_component_1.ItemDetailComponent,
             dashboard_component_1.DashboardComponent,
             category_component_1.CategoryComponent,
             sidebar_component_1.SidebarComponent,
