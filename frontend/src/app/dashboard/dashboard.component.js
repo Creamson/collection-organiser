@@ -19,11 +19,18 @@ var DashboardComponent = (function () {
     }
     DashboardComponent.prototype.getCategories = function () {
         var _this = this;
-        console.log("o;a");
-        this.categories.push(new category_1.Category("tu jestem"));
         this.itemService.getCategories()
-            .then(function (categories) { return _this.categories = categories; });
-        this.categories.push(new category_1.Category("BOOKS"));
+            .then(function (categories) {
+            _this.categories = categories;
+            _this.inputCategory = new category_1.Category("input");
+        });
+    };
+    DashboardComponent.prototype.saveCategory = function (category) {
+        var _this = this;
+        this.itemService.addCategory(category).then(function (categories) {
+            _this.categories = categories;
+            _this.inputCategory = new category_1.Category("input");
+        });
     };
     DashboardComponent.prototype.ngOnInit = function () {
         this.getCategories();

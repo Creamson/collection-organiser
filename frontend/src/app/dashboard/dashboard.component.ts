@@ -10,15 +10,23 @@ import {Category} from "../category";
 
 export class DashboardComponent implements OnInit {
   categories: Category[] = [];
+  inputCategory: Category;
 
   constructor(private itemService: ItemService) { }
 
   getCategories(): void {
-    console.log("o;a");
-    this.categories.push(new Category("tu jestem"));
     this.itemService.getCategories()
-      .then(categories => this.categories = categories);
-    this.categories.push(new Category("BOOKS"));
+      .then(categories => {
+        this.categories = categories;
+        this.inputCategory = new Category("input");
+      });
+  }
+
+  saveCategory(category: Category): void {
+    this.itemService.addCategory(category).then(categories => {
+      this.categories = categories;
+      this.inputCategory = new Category("input");
+    });
   }
 
   ngOnInit(): void {

@@ -35,8 +35,15 @@ var ItemService = (function () {
             return categories;
         }));
     };
+    ItemService.prototype.addCategory = function (category) {
+        var _this = this;
+        var requestBody = "{ \"name\": \"" + category.name + "\"}";
+        console.log(requestBody);
+        return Promise.resolve(this.authHttp.post(this.url, requestBody).toPromise().then(function (response) {
+            return _this.getCategories();
+        }));
+    };
     ItemService.prototype.getItemsOfCategory = function (category) {
-        console.log("hej ");
         return Promise.resolve(this.authHttp.get(this.url + "/" + category.name, this.requestBody).toPromise().then(function (response) {
             console.log(response);
             var json = response.json().items;
@@ -49,19 +56,17 @@ var ItemService = (function () {
             return items;
         }));
     };
-    ItemService.prototype.setItem = function (item) {
+    ItemService.prototype.updateItem = function (item) {
         var _this = this;
         var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
-        console.log(requestBody);
         this.authHttp.put(this.url + "/" + item.category.name + "/" + item.name, requestBody).subscribe(function (response) {
             console.log(response.text());
             _this.response = response.text();
         }, function (error) { return _this.response = 'error: ' + error.text(); });
     };
-    ItemService.prototype.saveItem = function (item) {
+    ItemService.prototype.addItem = function (item) {
         var _this = this;
         var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
-        console.log(requestBody);
         this.authHttp.post(this.url + "/" + item.category.name, requestBody).subscribe(function (response) {
             console.log(response.text());
             _this.response = response.text();

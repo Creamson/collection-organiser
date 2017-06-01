@@ -17,8 +17,7 @@ var item_1 = require("../item");
 var item_service_1 = require("../item.service");
 var category_1 = require("../category");
 var CategoryComponent = (function () {
-    function CategoryComponent(router, itemService, route, location) {
-        this.router = router;
+    function CategoryComponent(itemService, route, location) {
         this.itemService = itemService;
         this.route = route;
         this.location = location;
@@ -29,7 +28,6 @@ var CategoryComponent = (function () {
     };
     CategoryComponent.prototype.ngOnInit = function () {
         var _this = this;
-        console.log("jtest");
         this.route.params
             .switchMap(function (params) { return _this.itemService.getCategory(params['name']); })
             .subscribe(function (category) {
@@ -46,7 +44,7 @@ var CategoryComponent = (function () {
     };
     CategoryComponent.prototype.saveCheckbox = function (item) {
         item.todo = !item.todo;
-        this.itemService.setItem(item);
+        this.itemService.updateItem(item);
         return item.todo;
     };
     CategoryComponent.prototype.deleteItem = function (item) {
@@ -56,8 +54,7 @@ var CategoryComponent = (function () {
         return true;
     };
     CategoryComponent.prototype.saveItem = function (item) {
-        console.log("oooo:" + item.category.name);
-        this.itemService.saveItem(item);
+        this.itemService.addItem(item);
         this.getItems();
         this.selectedItem = null;
         return true;
@@ -74,8 +71,7 @@ CategoryComponent = __decorate([
         templateUrl: './category.component.html',
         styleUrls: ['./category.component.css']
     }),
-    __metadata("design:paramtypes", [router_1.Router,
-        item_service_1.ItemService,
+    __metadata("design:paramtypes", [item_service_1.ItemService,
         router_1.ActivatedRoute,
         common_1.Location])
 ], CategoryComponent);

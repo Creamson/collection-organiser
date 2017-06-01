@@ -35,8 +35,17 @@ export class ItemService implements OnInit {
     ));
   }
 
+  addCategory(category: Category): Promise<Category[]> {
+    var requestBody = "{ \"name\": \"" + category.name + "\"}";
+    console.log(requestBody);
+    return Promise.resolve(this.authHttp.post(this.url, requestBody).toPromise().then(
+      response => {
+        return this.getCategories();
+      }
+    ));
+  }
+
   getItemsOfCategory(category: Category): Promise<Item[]> {
-    console.log("hej ");
     return Promise.resolve(this.authHttp.get(this.url + "/" + category.name, this.requestBody).toPromise().then(
       response => {
         console.log(response);
@@ -51,9 +60,8 @@ export class ItemService implements OnInit {
     ));
   }
 
-  setItem(item: Item): void {
+  updateItem(item: Item): void {
     var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
-    console.log(requestBody);
     this.authHttp.put(this.url + "/" + item.category.name + "/" + item.name, requestBody).subscribe(
       response => {
         console.log(response.text());
@@ -63,9 +71,8 @@ export class ItemService implements OnInit {
     );
   }
 
-  saveItem(item: Item): void {
+  addItem(item: Item): void {
     var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
-    console.log(requestBody);
     this.authHttp.post(this.url + "/" + item.category.name, requestBody).subscribe(
       response => {
         console.log(response.text());
