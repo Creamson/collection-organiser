@@ -20,7 +20,6 @@ var auth_guard_1 = require("./guards/auth.guard");
 var google_auth_service_1 = require("./google-auth/google-auth.service");
 var angular2_jwt_1 = require("angular2-jwt");
 var item_service_1 = require("./item.service");
-var dashboard_component_1 = require("./dashboard/dashboard.component");
 var category_component_1 = require("./category/category.component");
 var sidebar_component_1 = require("./sidebar/sidebar.component");
 function authHttpServiceFactory(http, options) {
@@ -46,7 +45,6 @@ AppModule = __decorate([
             google_login_component_1.GoogleLoginComponent,
             home_component_1.HomeComponent,
             login_page_component_1.LoginPageComponent,
-            dashboard_component_1.DashboardComponent,
             category_component_1.CategoryComponent,
             sidebar_component_1.SidebarComponent,
         ],

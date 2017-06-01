@@ -23,7 +23,6 @@ var ItemService = (function () {
         this.requestBody = "";
         this.id_token = localStorage.getItem('id_token');
         this.decodedJwt = new angular2_jwt_1.JwtHelper().decodeToken(this.id_token);
-        this.response = 'nothing received yet';
     }
     ItemService.prototype.getCategories = function () {
         return Promise.resolve(this.authHttp.get(this.url, this.requestBody).toPromise().then(function (response) {
@@ -57,20 +56,18 @@ var ItemService = (function () {
         }));
     };
     ItemService.prototype.updateItem = function (item) {
-        var _this = this;
         var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
         this.authHttp.put(this.url + "/" + item.category.name + "/" + item.name, requestBody).subscribe(function (response) {
             console.log(response.text());
-            _this.response = response.text();
-        }, function (error) { return _this.response = 'error: ' + error.text(); });
+        });
     };
     ItemService.prototype.addItem = function (item) {
         var _this = this;
         var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
-        this.authHttp.post(this.url + "/" + item.category.name, requestBody).subscribe(function (response) {
+        return Promise.resolve(this.authHttp.post(this.url + "/" + item.category.name, requestBody).toPromise().then(function (response) {
             console.log(response.text());
-            _this.response = response.text();
-        }, function (error) { return _this.response = 'error: ' + error.text(); });
+            return _this.getItemsOfCategory(item.category);
+        }));
     };
     ItemService.prototype.deleteItem = function (item) {
         var _this = this;
@@ -78,8 +75,16 @@ var ItemService = (function () {
         console.log(requestBody);
         return Promise.resolve(this.authHttp.delete(this.url + "/" + item.category.name + "/" + item.name, requestBody).toPromise().then(function (response) {
             console.log(response.text());
-            _this.response = response.text();
             return _this.getItemsOfCategory(item.category);
+        }));
+    };
+    ItemService.prototype.deleteCategory = function (category) {
+        var _this = this;
+        var requestBody = "{ \"name\": \"" + category.name + "\ }";
+        console.log(requestBody);
+        return Promise.resolve(this.authHttp.delete(this.url + "/" + category.name, requestBody).toPromise().then(function (response) {
+            console.log(response.text());
+            return _this.getCategories();
         }));
     };
     ItemService.prototype.getCategory = function (name) {

@@ -1,50 +1,37 @@
 <app-sidebar></app-sidebar>
-<h2>
-  <!--Items of category: {{category.name}}-->
-
-  <div *ngIf="category">
-    {{category.name}}
-  </div>
-</h2>
-
-<div *ngIf="inputItem">
-<span class="badge">
-      <label> todo:
-        <input type="checkbox" [checked]="inputItem.todo" (change)="saveCheckbox(inputItem)"/>
-      </label>
-    </span>
-<label> name:
-  <input [(ngModel)]="inputItem.name" placeholder="name">
-</label>
-<label *ngIf="!inputItem.todo"> rating:
-  <input [(ngModel)]="inputItem.rating" placeholder="rating">
-</label>
-<button (click)="saveItem(inputItem)">Save</button>
-</div>
-
-<div *ngIf="selectedItem">
+<div style="margin-left:25%">
   <h2>
-    You are editing {{selectedItem.name | uppercase}}
+    <div *ngIf="category">
+      {{category.name}}
+    </div>
   </h2>
-</div>
 
-<h3>
-  <ul class="items">
-    <li *ngFor="let item of items"
+  <table>
+    <tr>
+      <th>Todo</th>
+      <th>Name</th>
+      <th>Rating</th>
+      <th>Action</th>
+    </tr>
+    <tr *ngIf="inputItem">
+      <td><input type="checkbox" [checked]="inputItem.todo" (change)="saveCheckbox(inputItem)"/></td>
+      <td><input [(ngModel)]="inputItem.name" placeholder="name"></td>
+      <td><input [(ngModel)]="inputItem.rating" placeholder="rating"></td>
+      <td>
+        <button (click)="saveItem(inputItem)">Save</button>
+      </td>
+    </tr>
+    <tr *ngFor="let item of items"
         (click)="onSelect(item)"
         [class.selected]="item === selectedItem">
-    <span class="badge">
-      <label>
-        <input type="checkbox" [checked]="item.todo" (change)="saveCheckbox(item)"/>
-      </label>
-    </span>
-      <label>{{item.name}}</label>
-      <label *ngIf="!item.todo"> rating:
-        <input [(ngModel)]="item.rating" placeholder="rating">
-      </label>
-      <button (click)="deleteItem(item)">Delete</button>
-    </li>
-  </ul>
-
-</h3>
-<button (click)="goBack()">Back</button>
+      <td><input type="checkbox" [checked]="item.todo" (change)="saveCheckbox(item)"/></td>
+      <td>{{item.name}}</td>
+      <td><input [(ngModel)]="item.rating" placeholder="rating"></td>
+      <td>
+        <button (click)="deleteItem(item)">Delete</button>
+      </td>
+    </tr>
+  </table>
+  <button (click)="goBack()">Back</button>
+  <button (click)="deleteCategory(category)">Delete collection</button>
+</div>

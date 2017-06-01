@@ -49,15 +49,30 @@ var CategoryComponent = (function () {
     };
     CategoryComponent.prototype.deleteItem = function (item) {
         var _this = this;
-        this.itemService.deleteItem(item).then(function (items) { return _this.items = items; });
-        this.selectedItem = null;
+        this.itemService.deleteItem(item).then(function (items) {
+            _this.items = items;
+            _this.selectedItem = item;
+            _this.inputItem = new item_1.Item("", 0, true, _this.category);
+        });
         return true;
     };
     CategoryComponent.prototype.saveItem = function (item) {
-        this.itemService.addItem(item);
-        this.getItems();
-        this.selectedItem = null;
-        return true;
+        var _this = this;
+        if (item.name != "") {
+            this.itemService.addItem(item).then(function (items) {
+                _this.items = items;
+                _this.selectedItem = item;
+                _this.inputItem = new item_1.Item("", 0, true, _this.category);
+            });
+            return true;
+        }
+    };
+    CategoryComponent.prototype.deleteCategory = function (category) {
+        var _this = this;
+        this.itemService.deleteCategory(category).then(function (categories) {
+            _this.goBack();
+            location.reload();
+        });
     };
     return CategoryComponent;
 }());

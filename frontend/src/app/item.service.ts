@@ -12,14 +12,12 @@ export class ItemService implements OnInit {
 
   private id_token: string;
   private decodedJwt: string;
-  private response: string;
-  private url: string = apiPath + 'collections'
+  private url: string = apiPath + 'collections';
   public requestBody = "";
 
   constructor(public authHttp: AuthHttp) {
     this.id_token = localStorage.getItem('id_token');
     this.decodedJwt = new JwtHelper().decodeToken(this.id_token);
-    this.response = 'nothing received yet';
   }
 
   getCategories(): Promise<Category[]> {
@@ -65,21 +63,18 @@ export class ItemService implements OnInit {
     this.authHttp.put(this.url + "/" + item.category.name + "/" + item.name, requestBody).subscribe(
       response => {
         console.log(response.text());
-        this.response = response.text()
-      },
-      error => this.response = 'error: ' + error.text()
+      }
     );
   }
 
-  addItem(item: Item): void {
+  addItem(item: Item): Promise<Item[]> {
     var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
-    this.authHttp.post(this.url + "/" + item.category.name, requestBody).subscribe(
+    return Promise.resolve(this.authHttp.post(this.url + "/" + item.category.name, requestBody).toPromise().then(
       response => {
         console.log(response.text());
-        this.response = response.text()
-      },
-      error => this.response = 'error: ' + error.text()
-    );
+        return this.getItemsOfCategory(item.category);
+      }
+    ));
   }
 
   deleteItem(item: Item): Promise<Item[]> {
@@ -88,8 +83,19 @@ export class ItemService implements OnInit {
     return Promise.resolve(this.authHttp.delete(this.url + "/" + item.category.name + "/" + item.name, requestBody).toPromise().then(
       response => {
         console.log(response.text());
-        this.response = response.text();
+
         return this.getItemsOfCategory(item.category);
+      }
+    ));
+  }
+
+  deleteCategory(category: Category): Promise<Category[]> {
+    var requestBody = "{ \"name\": \"" + category.name + "\ }";
+    console.log(requestBody);
+    return Promise.resolve(this.authHttp.delete(this.url + "/" + category.name, requestBody).toPromise().then(
+      response => {
+        console.log(response.text());
+        return this.getCategories();
       }
     ));
   }

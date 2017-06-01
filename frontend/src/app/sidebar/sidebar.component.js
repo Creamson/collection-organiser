@@ -10,10 +10,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var item_service_1 = require("../item.service");
+var category_1 = require("../category");
 var SidebarComponent = (function () {
-    function SidebarComponent() {
+    function SidebarComponent(itemService) {
+        this.itemService = itemService;
+        this.title = 'Collections organiser';
+        this.categories = [];
     }
+    SidebarComponent.prototype.getCategories = function () {
+        var _this = this;
+        this.itemService.getCategories()
+            .then(function (categories) {
+            _this.categories = categories;
+            _this.inputCategory = new category_1.Category("input");
+        });
+    };
+    SidebarComponent.prototype.saveCategory = function (category) {
+        var _this = this;
+        this.itemService.addCategory(category).then(function (categories) {
+            _this.categories = categories;
+            _this.inputCategory = new category_1.Category("input");
+        });
+    };
     SidebarComponent.prototype.ngOnInit = function () {
+        this.getCategories();
     };
     return SidebarComponent;
 }());
@@ -23,7 +44,7 @@ SidebarComponent = __decorate([
         templateUrl: './sidebar.component.html',
         styleUrls: ['./sidebar.component.css']
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [item_service_1.ItemService])
 ], SidebarComponent);
 exports.SidebarComponent = SidebarComponent;
 //# sourceMappingURL=sidebar.component.js.map

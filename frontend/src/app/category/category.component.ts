@@ -53,15 +53,29 @@ export class CategoryComponent implements OnInit {
   }
 
   deleteItem(item: Item): boolean {
-    this.itemService.deleteItem(item).then(items => this.items = items);
-    this.selectedItem = null;
+    this.itemService.deleteItem(item).then(items => {
+      this.items = items;
+      this.selectedItem = item;
+      this.inputItem = new Item("", 0, true, this.category);
+    });
     return true;
   }
 
   saveItem(item: Item): boolean {
-    this.itemService.addItem(item);
-    this.getItems();
-    this.selectedItem = null;
-    return true;
+    if (item.name != "") {
+      this.itemService.addItem(item).then(items => {
+        this.items = items;
+        this.selectedItem = item;
+        this.inputItem = new Item("", 0, true, this.category);
+      });
+      return true;
+    }
+  }
+
+  deleteCategory(category: Category) : void {
+    this.itemService.deleteCategory(category).then(categories => {
+      this.goBack();
+      location.reload();
+    });
   }
 }
