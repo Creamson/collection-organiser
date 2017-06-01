@@ -51,7 +51,6 @@ export class ItemService implements OnInit {
         for (let entry of json) {
           console.log(entry);
           items.push(new Item(entry.name, entry.rating as number, entry.todo as boolean, category));
-
         }
         return items;
       }

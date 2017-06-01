@@ -5,7 +5,6 @@ import {AuthGuard} from "app/guards/auth.guard";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {ItemDetailComponent} from "./item-detail/item-detail.component";
 import {CategoryComponent} from "./category/category.component";
-import {ItemsComponent} from "./items/items.component";
 
 export const routes: Routes = [
   {path: '', component: LoginPageComponent},
@@ -13,6 +12,5 @@ export const routes: Routes = [
   {path: 'dashboard', component: DashboardComponent},
   {path: 'detail/:name', component: ItemDetailComponent},
   {path: 'category/:name', component: CategoryComponent},
-  {path: 'items', component: ItemsComponent},
   {path: '**', component: LoginPageComponent}
 ];
