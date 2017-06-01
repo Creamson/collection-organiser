@@ -6,6 +6,22 @@
     {{category.name}}
   </div>
 </h2>
+
+<div *ngIf="inputItem">
+<span class="badge">
+      <label> todo:
+        <input type="checkbox" [checked]="inputItem.todo" (change)="saveCheckbox(inputItem)"/>
+      </label>
+    </span>
+<label> name:
+  <input [(ngModel)]="inputItem.name" placeholder="name">
+</label>
+<label *ngIf="!inputItem.todo"> rating:
+  <input [(ngModel)]="inputItem.rating" placeholder="rating">
+</label>
+<button (click)="saveItem(inputItem)">Save</button>
+</div>
+
 <div *ngIf="selectedItem">
   <h2>
     You are editing {{selectedItem.name | uppercase}}
@@ -18,14 +34,15 @@
         (click)="onSelect(item)"
         [class.selected]="item === selectedItem">
     <span class="badge">
-      <label>{{item.name}}</label>
-    </span>
-      <label>todo:
-        <input type="checkbox" [checked]="item.todo" (change)="item.todo = !item.todo"/>
+      <label>
+        <input type="checkbox" [checked]="item.todo" (change)="saveCheckbox(item)"/>
       </label>
+    </span>
+      <label>{{item.name}}</label>
       <label *ngIf="!item.todo"> rating:
         <input [(ngModel)]="item.rating" placeholder="rating">
       </label>
+      <button (click)="deleteItem(item)">Delete</button>
     </li>
   </ul>
 

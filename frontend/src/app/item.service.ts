@@ -22,12 +22,6 @@ export class ItemService implements OnInit {
     this.response = 'nothing received yet';
   }
 
-  getItems(): Promise<Item[]> {
-    // todo
-    var category: Category = new Category("Movies");
-    return this.getItemsOfCategory(category);
-  }
-
   getCategories(): Promise<Category[]> {
     return Promise.resolve(this.authHttp.get(this.url, this.requestBody).toPromise().then(
       response => {
@@ -57,9 +51,40 @@ export class ItemService implements OnInit {
     ));
   }
 
-  getItem(name: string): Promise<Item> {
-    return this.getItems()
-      .then(items => items.find(item => item.name === name));
+  setItem(item: Item): void {
+    var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
+    console.log(requestBody);
+    this.authHttp.put(this.url + "/" + item.category.name + "/" + item.name, requestBody).subscribe(
+      response => {
+        console.log(response.text());
+        this.response = response.text()
+      },
+      error => this.response = 'error: ' + error.text()
+    );
+  }
+
+  saveItem(item: Item): void {
+    var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
+    console.log(requestBody);
+    this.authHttp.post(this.url + "/" + item.category.name, requestBody).subscribe(
+      response => {
+        console.log(response.text());
+        this.response = response.text()
+      },
+      error => this.response = 'error: ' + error.text()
+    );
+  }
+
+  deleteItem(item: Item): Promise<Item[]> {
+    var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
+    console.log(requestBody);
+    return Promise.resolve(this.authHttp.delete(this.url + "/" + item.category.name + "/" + item.name, requestBody).toPromise().then(
+      response => {
+        console.log(response.text());
+        this.response = response.text();
+        return this.getItemsOfCategory(item.category);
+      }
+    ));
   }
 
   getCategory(name: string): Promise<Category> {

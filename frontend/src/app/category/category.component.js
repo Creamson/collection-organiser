@@ -13,6 +13,7 @@ var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var common_1 = require("@angular/common");
 require("rxjs/add/operator/switchMap");
+var item_1 = require("../item");
 var item_service_1 = require("../item.service");
 var category_1 = require("../category");
 var CategoryComponent = (function () {
@@ -28,11 +29,13 @@ var CategoryComponent = (function () {
     };
     CategoryComponent.prototype.ngOnInit = function () {
         var _this = this;
+        console.log("jtest");
         this.route.params
             .switchMap(function (params) { return _this.itemService.getCategory(params['name']); })
             .subscribe(function (category) {
             _this.category = category;
             _this.getItems();
+            _this.inputItem = new item_1.Item("", 0, true, _this.category);
         });
     };
     CategoryComponent.prototype.onSelect = function (item) {
@@ -40,6 +43,24 @@ var CategoryComponent = (function () {
     };
     CategoryComponent.prototype.goBack = function () {
         this.location.back();
+    };
+    CategoryComponent.prototype.saveCheckbox = function (item) {
+        item.todo = !item.todo;
+        this.itemService.setItem(item);
+        return item.todo;
+    };
+    CategoryComponent.prototype.deleteItem = function (item) {
+        var _this = this;
+        this.itemService.deleteItem(item).then(function (items) { return _this.items = items; });
+        this.selectedItem = null;
+        return true;
+    };
+    CategoryComponent.prototype.saveItem = function (item) {
+        console.log("oooo:" + item.category.name);
+        this.itemService.saveItem(item);
+        this.getItems();
+        this.selectedItem = null;
+        return true;
     };
     return CategoryComponent;
 }());

@@ -25,11 +25,6 @@ var ItemService = (function () {
         this.decodedJwt = new angular2_jwt_1.JwtHelper().decodeToken(this.id_token);
         this.response = 'nothing received yet';
     }
-    ItemService.prototype.getItems = function () {
-        // todo
-        var category = new category_1.Category("Movies");
-        return this.getItemsOfCategory(category);
-    };
     ItemService.prototype.getCategories = function () {
         return Promise.resolve(this.authHttp.get(this.url, this.requestBody).toPromise().then(function (response) {
             var categories = [];
@@ -54,9 +49,33 @@ var ItemService = (function () {
             return items;
         }));
     };
-    ItemService.prototype.getItem = function (name) {
-        return this.getItems()
-            .then(function (items) { return items.find(function (item) { return item.name === name; }); });
+    ItemService.prototype.setItem = function (item) {
+        var _this = this;
+        var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
+        console.log(requestBody);
+        this.authHttp.put(this.url + "/" + item.category.name + "/" + item.name, requestBody).subscribe(function (response) {
+            console.log(response.text());
+            _this.response = response.text();
+        }, function (error) { return _this.response = 'error: ' + error.text(); });
+    };
+    ItemService.prototype.saveItem = function (item) {
+        var _this = this;
+        var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
+        console.log(requestBody);
+        this.authHttp.post(this.url + "/" + item.category.name, requestBody).subscribe(function (response) {
+            console.log(response.text());
+            _this.response = response.text();
+        }, function (error) { return _this.response = 'error: ' + error.text(); });
+    };
+    ItemService.prototype.deleteItem = function (item) {
+        var _this = this;
+        var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
+        console.log(requestBody);
+        return Promise.resolve(this.authHttp.delete(this.url + "/" + item.category.name + "/" + item.name, requestBody).toPromise().then(function (response) {
+            console.log(response.text());
+            _this.response = response.text();
+            return _this.getItemsOfCategory(item.category);
+        }));
     };
     ItemService.prototype.getCategory = function (name) {
         return this.getCategories()

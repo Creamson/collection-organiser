@@ -16,6 +16,7 @@ import {Category} from "../category";
 export class CategoryComponent implements OnInit {
   items: Item[];
   selectedItem: Item;
+  inputItem: Item;
   @Input() category: Category;
 
   constructor(private router: Router,
@@ -28,11 +29,13 @@ export class CategoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log("jtest");
     this.route.params
       .switchMap((params: Params) => this.itemService.getCategory(params['name']))
       .subscribe(category => {
         this.category = category;
         this.getItems();
+        this.inputItem = new Item("", 0, true, this.category);
       });
   }
 
@@ -42,5 +45,25 @@ export class CategoryComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+
+  saveCheckbox(item: Item): boolean {
+    item.todo = !item.todo;
+    this.itemService.setItem(item);
+    return item.todo;
+  }
+
+  deleteItem(item: Item): boolean {
+    this.itemService.deleteItem(item).then(items => this.items = items );
+    this.selectedItem = null;
+    return true;
+  }
+
+  saveItem(item: Item): boolean {
+    console.log("oooo:" + item.category.name);
+    this.itemService.saveItem(item);
+    this.getItems();
+    this.selectedItem = null;
+    return true;
   }
 }

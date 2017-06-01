@@ -109,6 +109,25 @@ public class CollectionController {
         });
     }
 
+    @JsonView(View.DetailedData.class)
+    @CrossOrigin
+    @RequestMapping(method = GET, path = "/collections/{collectionName}/{itemName}")
+    public ResponseEntity getItem(@RequestHeader(value = "Authorization") String authHeader,
+                                  @PathVariable String collectionName,
+                                  @PathVariable String itemName) {
+
+        return verifyTokenAndGetResponse(authHeader, (String userID) -> {
+            Collection requestedCollection = this.collectionRepository.findByOwnerIdAndName(userID, collectionName);
+            if (requestedCollection != null) {
+                Optional<CollectionItem> requestedItem = requestedCollection.getItemByName(itemName);
+                if (requestedItem.isPresent()) {
+                    return ResponseEntity.status(HttpStatus.OK).body(requestedItem.get());
+                }
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found");
+        });
+    }
+
     @CrossOrigin
     @RequestMapping(method = POST, path = "collections/{collectionName}")
     public ResponseEntity createItem(@RequestHeader(value = "Authorization") String authHeader,
