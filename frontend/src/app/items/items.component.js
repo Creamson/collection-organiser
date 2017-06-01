@@ -33,7 +33,7 @@ var ItemsComponent = (function () {
     };
     ItemsComponent.prototype.gotoCategory = function () {
         console.log('ZSA category' + this.selectedItem.category.name);
-        this.router.navigate(['/category', this.selectedItem.category.id]);
+        this.router.navigate(['/category', this.selectedItem.category.name]);
     };
     return ItemsComponent;
 }());

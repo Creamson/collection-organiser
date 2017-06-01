@@ -14,8 +14,11 @@ export class DashboardComponent implements OnInit {
   constructor(private itemService: ItemService) { }
 
   getCategories(): void {
+    console.log("o;a");
+    this.categories.push(new Category("tu jestem"));
     this.itemService.getCategories()
       .then(categories => this.categories = categories);
+    this.categories.push(new Category("BOOKS"));
   }
 
   ngOnInit(): void {

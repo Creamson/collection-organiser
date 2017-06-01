@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
 
   public sendGetRequest(service: string) {
     const url = apiPath + service;
+    this.response = url;
 
     this.authHttp.get(url, this.requestBody).subscribe(
       response => this.response = response.text(),

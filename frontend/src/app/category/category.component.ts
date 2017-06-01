@@ -29,7 +29,7 @@ export class CategoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params
-      .switchMap((params: Params) => this.itemService.getCategory(+params['id']))
+      .switchMap((params: Params) => this.itemService.getCategory(params['name']))
       .subscribe(category => {
         this.category = category;
         this.getItems();

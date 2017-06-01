@@ -24,6 +24,7 @@ var items_component_1 = require("./items/items.component");
 var item_service_1 = require("./item.service");
 var dashboard_component_1 = require("./dashboard/dashboard.component");
 var category_component_1 = require("./category/category.component");
+var sidebar_component_1 = require("./sidebar/sidebar.component");
 function authHttpServiceFactory(http, options) {
     return new angular2_jwt_1.AuthHttp(new angular2_jwt_1.AuthConfig({
         tokenName: 'id_token',
@@ -51,6 +52,7 @@ AppModule = __decorate([
             items_component_1.ItemsComponent,
             dashboard_component_1.DashboardComponent,
             category_component_1.CategoryComponent,
+            sidebar_component_1.SidebarComponent,
         ],
         imports: [
             platform_browser_1.BrowserModule,

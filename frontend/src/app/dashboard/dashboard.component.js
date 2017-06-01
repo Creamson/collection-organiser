@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var item_service_1 = require("../item.service");
+var category_1 = require("../category");
 var DashboardComponent = (function () {
     function DashboardComponent(itemService) {
         this.itemService = itemService;
@@ -18,8 +19,11 @@ var DashboardComponent = (function () {
     }
     DashboardComponent.prototype.getCategories = function () {
         var _this = this;
+        console.log("o;a");
+        this.categories.push(new category_1.Category("tu jestem"));
         this.itemService.getCategories()
             .then(function (categories) { return _this.categories = categories; });
+        this.categories.push(new category_1.Category("BOOKS"));
     };
     DashboardComponent.prototype.ngOnInit = function () {
         this.getCategories();
