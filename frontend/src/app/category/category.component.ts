@@ -6,6 +6,7 @@ import "rxjs/add/operator/switchMap";
 import {Item} from "../item";
 import {ItemService} from "../item.service";
 import {Category} from "../category";
+import {SidebarComponent} from "../sidebar/sidebar.component";
 
 @Component({
   selector: 'category-my',
@@ -62,6 +63,8 @@ export class CategoryComponent implements OnInit {
   }
 
   saveItem(item: Item): boolean {
+    while (item.name.startsWith(" ")) item.name = item.name.substring(1);
+    while (item.name.endsWith(" ")) item.name = item.name.substring(0, item.name.length - 1);
     if (item.name != "") {
       this.itemService.addItem(item).then(items => {
         this.items = items;
@@ -75,7 +78,6 @@ export class CategoryComponent implements OnInit {
   deleteCategory(category: Category) : void {
     this.itemService.deleteCategory(category).then(categories => {
       this.goBack();
-      location.reload();
     });
   }
 }

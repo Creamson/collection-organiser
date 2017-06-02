@@ -14,9 +14,13 @@ var item_service_1 = require("../item.service");
 var category_1 = require("../category");
 var SidebarComponent = (function () {
     function SidebarComponent(itemService) {
+        var _this = this;
         this.itemService = itemService;
         this.title = 'Collections organiser';
         this.categories = [];
+        this.itemService.categoryEvent.subscribe(function (categories) {
+            _this.categories = categories;
+        });
     }
     SidebarComponent.prototype.getCategories = function () {
         var _this = this;
@@ -28,10 +32,15 @@ var SidebarComponent = (function () {
     };
     SidebarComponent.prototype.saveCategory = function (category) {
         var _this = this;
-        this.itemService.addCategory(category).then(function (categories) {
-            _this.categories = categories;
-            _this.inputCategory = new category_1.Category("input");
-        });
+        while (category.name.startsWith(" "))
+            category.name = category.name.substring(1);
+        while (category.name.endsWith(" "))
+            category.name = category.name.substring(0, category.name.length - 1);
+        if (category.name != "") {
+            this.itemService.addCategory(category).then(function (categories) {
+                _this.inputCategory = new category_1.Category("input");
+            });
+        }
     };
     SidebarComponent.prototype.ngOnInit = function () {
         this.getCategories();

@@ -22,7 +22,6 @@ var GoogleLoginComponent = (function () {
         this.http = http;
         this.gAuth = gAuth;
         this.clientId = client_info_1.CLIENT_ID;
-        location.reload();
     }
     GoogleLoginComponent.prototype.ngAfterViewInit = function () {
         var that = this;

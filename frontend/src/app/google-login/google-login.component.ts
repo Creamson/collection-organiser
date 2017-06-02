@@ -16,7 +16,6 @@ export class GoogleLoginComponent implements AfterViewInit {
   private clientId: string;
   constructor(private element: ElementRef, private router: Router, private http: Http, private gAuth: GoogleAuthService) {
     this.clientId = CLIENT_ID;
-    location.reload();
   }
 
   ngAfterViewInit() {

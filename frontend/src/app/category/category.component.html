@@ -1,9 +1,7 @@
 <app-sidebar></app-sidebar>
 <div style="margin-left:25%">
-  <h2>
-    <div *ngIf="category">
+  <h2 *ngIf="category">
       {{category.name}}
-    </div>
   </h2>
 
   <table>
@@ -25,7 +23,7 @@
         (click)="onSelect(item)"
         [class.selected]="item === selectedItem">
       <td><input type="checkbox" [checked]="item.todo" (change)="saveCheckbox(item)"/></td>
-      <td>{{item.name}}</td>
+      <td><input [(ngModel)]="item.name" placeholder="name"></td>
       <td><input [(ngModel)]="item.rating" placeholder="rating"></td>
       <td>
         <button (click)="deleteItem(item)">Delete</button>

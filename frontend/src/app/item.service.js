@@ -21,51 +21,67 @@ var ItemService = (function () {
         this.authHttp = authHttp;
         this.url = constants_1.apiPath + 'collections';
         this.requestBody = "";
+        this.categoryEvent = new core_1.EventEmitter();
         this.id_token = localStorage.getItem('id_token');
         this.decodedJwt = new angular2_jwt_1.JwtHelper().decodeToken(this.id_token);
     }
     ItemService.prototype.getCategories = function () {
+        var _this = this;
         return Promise.resolve(this.authHttp.get(this.url, this.requestBody).toPromise().then(function (response) {
             var categories = [];
             for (var _i = 0, _a = response.json(); _i < _a.length; _i++) {
                 var entry = _a[_i];
                 categories.push(new category_1.Category(entry.name));
             }
+            _this.categoryEvent.emit(categories);
             return categories;
+        }, function (error) {
+            console.log(error.text);
+            return _this.getCategories();
         }));
     };
     ItemService.prototype.addCategory = function (category) {
         var _this = this;
         var requestBody = "{ \"name\": \"" + category.name + "\"}";
-        console.log(requestBody);
         return Promise.resolve(this.authHttp.post(this.url, requestBody).toPromise().then(function (response) {
+            return _this.getCategories();
+        }, function (error) {
+            console.log(error.text);
             return _this.getCategories();
         }));
     };
     ItemService.prototype.getItemsOfCategory = function (category) {
+        var _this = this;
         return Promise.resolve(this.authHttp.get(this.url + "/" + category.name, this.requestBody).toPromise().then(function (response) {
-            console.log(response);
-            var json = response.json().items;
             var items = [];
-            for (var _i = 0, json_1 = json; _i < json_1.length; _i++) {
-                var entry = json_1[_i];
-                console.log(entry);
-                items.push(new item_1.Item(entry.name, entry.rating, entry.todo, category));
+            if (response.json().hasOwnProperty('items')) {
+                var json = response.json().items;
+                for (var _i = 0, json_1 = json; _i < json_1.length; _i++) {
+                    var entry = json_1[_i];
+                    console.log(entry);
+                    items.push(new item_1.Item(entry.name, entry.rating, entry.todo, category));
+                }
             }
             return items;
+        }, function (error) {
+            console.log(error.text);
+            return _this.getItemsOfCategory(category);
         }));
     };
     ItemService.prototype.updateItem = function (item) {
         var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
         this.authHttp.put(this.url + "/" + item.category.name + "/" + item.name, requestBody).subscribe(function (response) {
             console.log(response.text());
-        });
+        }, function (error) { return console.log(error.text); });
     };
     ItemService.prototype.addItem = function (item) {
         var _this = this;
         var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
         return Promise.resolve(this.authHttp.post(this.url + "/" + item.category.name, requestBody).toPromise().then(function (response) {
             console.log(response.text());
+            return _this.getItemsOfCategory(item.category);
+        }, function (error) {
+            console.log(error.text);
             return _this.getItemsOfCategory(item.category);
         }));
     };
@@ -74,7 +90,9 @@ var ItemService = (function () {
         var requestBody = "{ \"name\": \"" + item.name + "\", \"todo\": " + item.todo + ", \"rating\": " + item.rating + "}";
         console.log(requestBody);
         return Promise.resolve(this.authHttp.delete(this.url + "/" + item.category.name + "/" + item.name, requestBody).toPromise().then(function (response) {
-            console.log(response.text());
+            return _this.getItemsOfCategory(item.category);
+        }, function (error) {
+            console.log(error.text);
             return _this.getItemsOfCategory(item.category);
         }));
     };
@@ -85,11 +103,14 @@ var ItemService = (function () {
         return Promise.resolve(this.authHttp.delete(this.url + "/" + category.name, requestBody).toPromise().then(function (response) {
             console.log(response.text());
             return _this.getCategories();
+        }, function (error) {
+            console.log(error.text);
+            return _this.getCategories();
         }));
     };
     ItemService.prototype.getCategory = function (name) {
         return this.getCategories()
-            .then(function (categories) { return categories.find(function (category) { return category.name === name; }); });
+            .then(function (categories) { return categories.find(function (category) { return category.name === name; }, function (error) { return console.log(error.text); }); });
     };
     ItemService.prototype.ngOnInit = function () {
     };

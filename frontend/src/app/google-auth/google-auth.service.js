@@ -43,6 +43,7 @@ var GoogleAuthService = (function () {
                 var id_token = googleUser.getAuthResponse().id_token;
                 localStorage.setItem('id_token', id_token);
                 that.router.navigate(['home']);
+                location.reload();
             }, function (error) {
                 console.log(JSON.stringify(error, undefined, 2));
             });

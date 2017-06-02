@@ -58,6 +58,10 @@ var CategoryComponent = (function () {
     };
     CategoryComponent.prototype.saveItem = function (item) {
         var _this = this;
+        while (item.name.startsWith(" "))
+            item.name = item.name.substring(1);
+        while (item.name.endsWith(" "))
+            item.name = item.name.substring(0, item.name.length - 1);
         if (item.name != "") {
             this.itemService.addItem(item).then(function (items) {
                 _this.items = items;
@@ -71,7 +75,6 @@ var CategoryComponent = (function () {
         var _this = this;
         this.itemService.deleteCategory(category).then(function (categories) {
             _this.goBack();
-            location.reload();
         });
     };
     return CategoryComponent;

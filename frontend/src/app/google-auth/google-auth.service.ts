@@ -40,6 +40,8 @@ export class GoogleAuthService {
 
           localStorage.setItem('id_token', id_token);
           that.router.navigate(['home']);
+
+          location.reload();
         }, function (error) {
           console.log(JSON.stringify(error, undefined, 2));
         });
@@ -68,7 +70,6 @@ export class GoogleAuthService {
     node.src = url;
     node.type = 'text/javascript';
     document.getElementsByTagName('head')[0].appendChild(node);
-
   }
 
 
