@@ -12,7 +12,7 @@
       <th>Action</th>
     </tr>
     <tr *ngIf="inputItem">
-      <td><input type="checkbox" [checked]="inputItem.todo" (change)="saveCheckbox(inputItem)"/></td>
+      <td><input type="checkbox" [checked]="inputItem.todo" (change)="updateCheckbox(inputItem)"/></td>
       <td><input [(ngModel)]="inputItem.name" placeholder="name"></td>
       <td><input [(ngModel)]="inputItem.rating" placeholder="rating"></td>
       <td>
@@ -22,12 +22,10 @@
     <tr *ngFor="let item of items"
         (click)="onSelect(item)"
         [class.selected]="item === selectedItem">
-      <td><input type="checkbox" [checked]="item.todo" (change)="saveCheckbox(item)"/></td>
-      <td><input [(ngModel)]="item.name" placeholder="name"></td>
-      <td><input [(ngModel)]="item.rating" placeholder="rating"></td>
-      <td>
-        <button (click)="deleteItem(item)">Delete</button>
-      </td>
+      <td><input type="checkbox" [checked]="item.todo" (change)="updateCheckbox(item)"/></td>
+      <td>{{item.name}}</td>
+      <td><input [(ngModel)]="item.rating" (change)="updateItem(item)" placeholder="rating"></td>
+      <td><button (click)="deleteItem(item)">Delete</button></td>
     </tr>
   </table>
   <button (click)="goBack()">Back</button>

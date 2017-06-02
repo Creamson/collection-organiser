@@ -42,7 +42,7 @@ var CategoryComponent = (function () {
     CategoryComponent.prototype.goBack = function () {
         this.location.back();
     };
-    CategoryComponent.prototype.saveCheckbox = function (item) {
+    CategoryComponent.prototype.updateCheckbox = function (item) {
         item.todo = !item.todo;
         this.itemService.updateItem(item);
         return item.todo;
@@ -69,6 +69,15 @@ var CategoryComponent = (function () {
                 _this.inputItem = new item_1.Item("", 0, true, _this.category);
             });
             return true;
+        }
+    };
+    CategoryComponent.prototype.updateItem = function (item) {
+        while (item.name.startsWith(" "))
+            item.name = item.name.substring(1);
+        while (item.name.endsWith(" "))
+            item.name = item.name.substring(0, item.name.length - 1);
+        if (item.name != "") {
+            this.itemService.updateItem(item);
         }
     };
     CategoryComponent.prototype.deleteCategory = function (category) {

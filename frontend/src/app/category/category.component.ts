@@ -47,7 +47,7 @@ export class CategoryComponent implements OnInit {
     this.location.back();
   }
 
-  saveCheckbox(item: Item): boolean {
+  updateCheckbox(item: Item): boolean {
     item.todo = !item.todo;
     this.itemService.updateItem(item);
     return item.todo;
@@ -72,6 +72,14 @@ export class CategoryComponent implements OnInit {
         this.inputItem = new Item("", 0, true, this.category);
       });
       return true;
+    }
+  }
+
+  updateItem(item: Item): void {
+    while (item.name.startsWith(" ")) item.name = item.name.substring(1);
+    while (item.name.endsWith(" ")) item.name = item.name.substring(0, item.name.length - 1);
+    if (item.name != "") {
+      this.itemService.updateItem(item);
     }
   }
 
