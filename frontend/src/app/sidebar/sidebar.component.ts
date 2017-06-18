@@ -7,7 +7,6 @@ import {Category} from "../category";
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })
-
 export class SidebarComponent implements OnInit {
   title = 'Collections organiser';
   categories: Category[] = [];
@@ -15,6 +14,7 @@ export class SidebarComponent implements OnInit {
 
   constructor(private itemService: ItemService) {
     this.itemService.categoryEvent.subscribe(categories => {
+      console.log("hello");
       this.categories = categories;
     });
   }

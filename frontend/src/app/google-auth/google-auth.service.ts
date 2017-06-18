@@ -30,21 +30,28 @@ export class GoogleAuthService {
     });
   }
 
-  public attachSignin(element) {
+  public attachSignin() {
     const that = this;
+
     this.loadAPIPromise.then( () => {
-      that.auth2.attachClickHandler(element, {},
-        function (googleUser) {
-          // const profile = googleUser.getBasicProfile();
+      gapi.signin2.render('ggl-btn-2', {
+        'scope': 'profile email',
+        'width': 200,
+        'height': 40,
+        'longtitle': true,
+        'theme': 'dark',
+        'onsuccess': function(googleUser){
           const id_token: string = googleUser.getAuthResponse().id_token;
 
           localStorage.setItem('id_token', id_token);
-          that.router.navigate(['home']);
-
-          location.reload();
-        }, function (error) {
+          that.router.navigate(['home']).then(function(){
+            location.reload();
+          });
+        },
+        'onfailure': function (error) {
           console.log(JSON.stringify(error, undefined, 2));
-        });
+        }
+      });
     });
   }
 

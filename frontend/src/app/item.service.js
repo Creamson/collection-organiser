@@ -36,6 +36,7 @@ var ItemService = (function () {
             _this.categoryEvent.emit(categories);
             return categories;
         }, function (error) {
+            // TODO stahp infinite logs on backend not running
             console.log(error.text);
             return _this.getCategories();
         }));

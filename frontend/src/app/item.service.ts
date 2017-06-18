@@ -33,6 +33,7 @@ export class ItemService implements OnInit {
         return categories;
       },
       error => {
+        // TODO stahp infinite logs on backend not running
         console.log(error.text);
         return this.getCategories();
       }

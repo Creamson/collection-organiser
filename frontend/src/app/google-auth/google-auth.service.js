@@ -35,17 +35,25 @@ var GoogleAuthService = (function () {
             _this.loadGapiScript();
         });
     };
-    GoogleAuthService.prototype.attachSignin = function (element) {
+    GoogleAuthService.prototype.attachSignin = function () {
         var that = this;
         this.loadAPIPromise.then(function () {
-            that.auth2.attachClickHandler(element, {}, function (googleUser) {
-                // const profile = googleUser.getBasicProfile();
-                var id_token = googleUser.getAuthResponse().id_token;
-                localStorage.setItem('id_token', id_token);
-                that.router.navigate(['home']);
-                location.reload();
-            }, function (error) {
-                console.log(JSON.stringify(error, undefined, 2));
+            gapi.signin2.render('ggl-btn-2', {
+                'scope': 'profile email',
+                'width': 200,
+                'height': 40,
+                'longtitle': true,
+                'theme': 'dark',
+                'onsuccess': function (googleUser) {
+                    var id_token = googleUser.getAuthResponse().id_token;
+                    localStorage.setItem('id_token', id_token);
+                    that.router.navigate(['home']).then(function () {
+                        location.reload();
+                    });
+                },
+                'onfailure': function (error) {
+                    console.log(JSON.stringify(error, undefined, 2));
+                }
             });
         });
     };

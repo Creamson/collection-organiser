@@ -1,0 +1,28 @@
+.displayContainer {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+.centerFlex {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+#firstObject {
+  background-color: #d7d7d7;
+  text-align: center;
+  height: 150px;
+  width: 300px;
+  border-radius: 10pt;
+  padding: 5pt;
+}
+
+.title-greeting {
+  margin: 0;
+}
+
+.login-btn {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}

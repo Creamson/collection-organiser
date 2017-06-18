@@ -1,1 +1,1 @@
-{"version":3,"file":"client-info.js","sourceRoot":"","sources":["client-info.ts"],"names":[],"mappings":";;AAAa,QAAA,SAAS,GAAG,0EAA0E,CAAC","sourcesContent":["export const CLIENT_ID = \"883587150016-1modr8pcl68pvlekgtp2conh9dlete8a.apps.googleusercontent.com\";\r\n"]}
+{"version":3,"file":"client-info.js","sourceRoot":"","sources":["client-info.ts"],"names":[],"mappings":";;AAAa,QAAA,SAAS,GAAG,0EAA0E,CAAC","sourcesContent":["export const CLIENT_ID = '883587150016-1modr8pcl68pvlekgtp2conh9dlete8a.apps.googleusercontent.com';\r\n"]}
