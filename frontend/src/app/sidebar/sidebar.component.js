@@ -16,10 +16,9 @@ var SidebarComponent = (function () {
     function SidebarComponent(itemService) {
         var _this = this;
         this.itemService = itemService;
-        this.title = 'Collections organiser';
+        this.title = 'Collections';
         this.categories = [];
         this.itemService.categoryEvent.subscribe(function (categories) {
-            console.log("hello");
             _this.categories = categories;
         });
     }

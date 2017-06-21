@@ -1,21 +1,6 @@
+<app-header></app-header>
 <app-sidebar></app-sidebar>
+
 <div style="margin-left:30%">
-  <button id="googleSignout" (click)="googleSignOut()">Google Sign-Out</button>
-  <p>
-  <span>
-    <label><b>https://localhost:8443/</b></label>
-    <input [(ngModel)]="urlInput">
-    <button (click)="sendPostRequest(urlInput)">Post</button>
-    <button (click)="sendGetRequest(urlInput)">Get</button>
-    <button (click)="sendPutRequest(urlInput)">Put</button>
-    <button (click)="sendDeleteRequest(urlInput)">Delete</button>
-  </span>
-  </p>
-  <p>
-    <label><b>Body: </b></label>
-    <input [(ngModel)]="requestBody">
-  </p>
-  <p>
-    {{response}}
-  </p>
+  <p>Welcome to Collection Organiser! Please select a collection from the list on the left.</p>
 </div>

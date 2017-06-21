@@ -8,13 +8,12 @@ import {Category} from "../category";
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-  title = 'Collections organiser';
+  title = 'Collections';
   categories: Category[] = [];
   inputCategory: Category;
 
   constructor(private itemService: ItemService) {
     this.itemService.categoryEvent.subscribe(categories => {
-      console.log("hello");
       this.categories = categories;
     });
   }

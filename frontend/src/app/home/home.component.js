@@ -10,44 +10,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var angular2_jwt_1 = require("angular2-jwt");
-var google_auth_service_1 = require("../google-auth/google-auth.service");
-var constants_1 = require("../../assets/constants");
 var HomeComponent = (function () {
-    function HomeComponent(gAuth, authHttp) {
-        this.gAuth = gAuth;
-        this.authHttp = authHttp;
-        this.urlInput = 'collections';
-        this.requestBody = '{"name": "Movies"}';
-        this.id_token = localStorage.getItem('id_token');
-        var jwtHelper = new angular2_jwt_1.JwtHelper();
-        this.decodedJwt = jwtHelper.decodeToken(this.id_token);
-        this.response = 'nothing received yet';
+    function HomeComponent() {
     }
-    HomeComponent.prototype.googleSignOut = function () {
-        this.gAuth.googleSignOut();
-    };
-    HomeComponent.prototype.sendGetRequest = function (service) {
-        var _this = this;
-        var url = constants_1.apiPath + service;
-        this.response = url;
-        this.authHttp.get(url, this.requestBody).subscribe(function (response) { return _this.response = response.text(); }, function (error) { return _this.response = 'error: ' + error.text(); });
-    };
-    HomeComponent.prototype.sendPostRequest = function (service) {
-        var _this = this;
-        var url = constants_1.apiPath + service;
-        this.authHttp.post(url, this.requestBody).subscribe(function (response) { return _this.response = response.text(); }, function (error) { return _this.response = 'error: ' + error.text(); });
-    };
-    HomeComponent.prototype.sendPutRequest = function (service) {
-        var _this = this;
-        var url = constants_1.apiPath + service;
-        this.authHttp.put(url, this.requestBody).subscribe(function (response) { return _this.response = response.text(); }, function (error) { return _this.response = 'error: ' + error.text(); });
-    };
-    HomeComponent.prototype.sendDeleteRequest = function (service) {
-        var _this = this;
-        var url = constants_1.apiPath + service;
-        this.authHttp.delete(url, this.requestBody).subscribe(function (response) { return _this.response = response.text(); }, function (error) { return _this.response = 'error: ' + error.text(); });
-    };
     HomeComponent.prototype.ngOnInit = function () {
     };
     return HomeComponent;
@@ -58,7 +23,7 @@ HomeComponent = __decorate([
         templateUrl: './home.component.html',
         styleUrls: ['./home.component.css']
     }),
-    __metadata("design:paramtypes", [google_auth_service_1.GoogleAuthService, angular2_jwt_1.AuthHttp])
+    __metadata("design:paramtypes", [])
 ], HomeComponent);
 exports.HomeComponent = HomeComponent;
 //# sourceMappingURL=home.component.js.map

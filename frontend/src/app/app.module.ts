@@ -16,6 +16,7 @@ import {AuthConfig, AuthHttp} from 'angular2-jwt';
 import {ItemService} from './item.service';
 import {CategoryComponent} from './category/category.component';
 import {SidebarComponent} from './sidebar/sidebar.component';
+import { HeaderComponent } from './header/header.component';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({
@@ -36,6 +37,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     LoginPageComponent,
     CategoryComponent,
     SidebarComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,

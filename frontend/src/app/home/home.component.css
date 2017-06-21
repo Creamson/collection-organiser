@@ -35,3 +35,8 @@ button {
   background-color: #eee;
   border-radius: 4px;
 }
+
+p {
+  font-size: 1em;
+  margin-top: 3em;
+}

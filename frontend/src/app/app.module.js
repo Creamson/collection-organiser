@@ -22,6 +22,7 @@ var angular2_jwt_1 = require("angular2-jwt");
 var item_service_1 = require("./item.service");
 var category_component_1 = require("./category/category.component");
 var sidebar_component_1 = require("./sidebar/sidebar.component");
+var header_component_1 = require("./header/header.component");
 function authHttpServiceFactory(http, options) {
     return new angular2_jwt_1.AuthHttp(new angular2_jwt_1.AuthConfig({
         tokenName: 'id_token',
@@ -47,6 +48,7 @@ AppModule = __decorate([
             login_page_component_1.LoginPageComponent,
             category_component_1.CategoryComponent,
             sidebar_component_1.SidebarComponent,
+            header_component_1.HeaderComponent,
         ],
         imports: [
             platform_browser_1.BrowserModule,
