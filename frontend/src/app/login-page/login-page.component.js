@@ -12,24 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var angular2_jwt_1 = require("angular2-jwt");
 var router_1 = require("@angular/router");
-var constants_1 = require("assets/constants");
-var http_1 = require("@angular/http");
 var LoginPageComponent = (function () {
-    function LoginPageComponent(router, http) {
+    function LoginPageComponent(router) {
         this.router = router;
-        this.http = http;
-        this.urlInput = 'greeting';
-        this.response = 'nothing received yet';
     }
     LoginPageComponent.prototype.ngOnInit = function () {
         if (angular2_jwt_1.tokenNotExpired('id_token')) {
             this.router.navigate(['home']);
         }
-    };
-    LoginPageComponent.prototype.sendSampleRequest = function (service) {
-        var _this = this;
-        var url = constants_1.apiPath + service;
-        this.http.get(url).subscribe(function (response) { return _this.response = response.text(); }, function (error) { return _this.response = 'error: ' + error.text(); });
     };
     return LoginPageComponent;
 }());
@@ -39,7 +29,7 @@ LoginPageComponent = __decorate([
         templateUrl: './login-page.component.html',
         styleUrls: ['./login-page.component.css']
     }),
-    __metadata("design:paramtypes", [router_1.Router, http_1.Http])
+    __metadata("design:paramtypes", [router_1.Router])
 ], LoginPageComponent);
 exports.LoginPageComponent = LoginPageComponent;
 //# sourceMappingURL=login-page.component.js.map

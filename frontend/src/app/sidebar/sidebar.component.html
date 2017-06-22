@@ -1,5 +1,13 @@
-<nav>
-  <a routerLink="/dashboard">Categories</a>
-  <a routerLink="/items">All Items</a>
-  <a routerLink="/login">Home</a>
-</nav>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<div class="w3-sidebar w3-light-grey w3-bar-block " style="width:25%">
+  <h3 class="w3-bar-item"> {{title}} </h3>
+  <a routerLink="/home" class="w3-bar-item w3-button">Home</a>
+  <a *ngFor="let category of categories" [routerLink]="['/category', category.name]" class="w3-bar-item w3-button">
+    {{category.name}}
+  </a>
+  <a *ngIf="inputCategory" class="w3-bar-item w3-button">
+    <input [(ngModel)]="inputCategory.name" placeholder="name" type="text" class="form-control">
+    <button (click)="saveCategory(inputCategory)">Save collection</button> </a>
+
+</div>

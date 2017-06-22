@@ -86,6 +86,7 @@ public class Collection {
         return itemNames.contains(item.getName());
     }
 
+    @JsonView(View.DetailedData.class)
     public Optional<CollectionItem> getItemByName(String name) {
         return this.getItems().stream().filter(e -> e.getName().equals(name)).findFirst();
     }

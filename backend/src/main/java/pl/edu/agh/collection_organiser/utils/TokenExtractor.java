@@ -1,6 +1,6 @@
 package pl.edu.agh.collection_organiser.utils;
 
-import javax.naming.AuthenticationException;
+import org.apache.http.auth.AuthenticationException;
 
 public class TokenExtractor {
 

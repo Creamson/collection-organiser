@@ -13,11 +13,11 @@ var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var common_1 = require("@angular/common");
 require("rxjs/add/operator/switchMap");
+var item_1 = require("../item");
 var item_service_1 = require("../item.service");
 var category_1 = require("../category");
 var CategoryComponent = (function () {
-    function CategoryComponent(router, itemService, route, location) {
-        this.router = router;
+    function CategoryComponent(itemService, route, location) {
         this.itemService = itemService;
         this.route = route;
         this.location = location;
@@ -29,20 +29,62 @@ var CategoryComponent = (function () {
     CategoryComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.route.params
-            .switchMap(function (params) { return _this.itemService.getCategory(+params['id']); })
+            .switchMap(function (params) { return _this.itemService.getCategory(params['name']); })
             .subscribe(function (category) {
             _this.category = category;
             _this.getItems();
+            _this.inputItem = new item_1.Item("", 0, true, _this.category);
         });
     };
     CategoryComponent.prototype.onSelect = function (item) {
         this.selectedItem = item;
     };
-    CategoryComponent.prototype.gotoDetail = function () {
-        this.router.navigate(['/detail', this.selectedItem.id]);
-    };
     CategoryComponent.prototype.goBack = function () {
         this.location.back();
+    };
+    CategoryComponent.prototype.updateCheckbox = function (item) {
+        item.todo = !item.todo;
+        this.itemService.updateItem(item);
+        return item.todo;
+    };
+    CategoryComponent.prototype.deleteItem = function (item) {
+        var _this = this;
+        this.itemService.deleteItem(item).then(function (items) {
+            _this.items = items;
+            _this.selectedItem = item;
+            _this.inputItem = new item_1.Item("", 0, true, _this.category);
+        });
+        return true;
+    };
+    CategoryComponent.prototype.saveItem = function (item) {
+        var _this = this;
+        while (item.name.startsWith(" "))
+            item.name = item.name.substring(1);
+        while (item.name.endsWith(" "))
+            item.name = item.name.substring(0, item.name.length - 1);
+        if (item.name != "") {
+            this.itemService.addItem(item).then(function (items) {
+                _this.items = items;
+                _this.selectedItem = item;
+                _this.inputItem = new item_1.Item("", 0, true, _this.category);
+            });
+            return true;
+        }
+    };
+    CategoryComponent.prototype.updateItem = function (item) {
+        while (item.name.startsWith(" "))
+            item.name = item.name.substring(1);
+        while (item.name.endsWith(" "))
+            item.name = item.name.substring(0, item.name.length - 1);
+        if (item.name != "") {
+            this.itemService.updateItem(item);
+        }
+    };
+    CategoryComponent.prototype.deleteCategory = function (category) {
+        var _this = this;
+        this.itemService.deleteCategory(category).then(function (categories) {
+            _this.goBack();
+        });
     };
     return CategoryComponent;
 }());
@@ -56,8 +98,7 @@ CategoryComponent = __decorate([
         templateUrl: './category.component.html',
         styleUrls: ['./category.component.css']
     }),
-    __metadata("design:paramtypes", [router_1.Router,
-        item_service_1.ItemService,
+    __metadata("design:paramtypes", [item_service_1.ItemService,
         router_1.ActivatedRoute,
         common_1.Location])
 ], CategoryComponent);

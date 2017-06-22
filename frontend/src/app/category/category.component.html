@@ -1,29 +1,34 @@
+<app-header></app-header>
 <app-sidebar></app-sidebar>
-<h2>
-  <!--Items of category: {{category.name}}-->
-
-  <div *ngIf="category">
-    {{category.name}}
-  </div>
-</h2>
-<div *ngIf="selectedItem">
-  <h2>
-    {{selectedItem.name | uppercase}} is my favourite item
+<div style="margin-left:25%">
+  <h2 *ngIf="category">
+      {{category.name}}
   </h2>
-  <button (click)="gotoDetail()">View Details</button>
-</div>
 
-<h3>
-  <ul class="items">
-    <li *ngFor="let item of items"
+  <table>
+    <tr>
+      <th>Todo</th>
+      <th>Name</th>
+      <th>Rating</th>
+      <th>Action</th>
+    </tr>
+    <tr *ngIf="inputItem">
+      <td><input type="checkbox" [checked]="inputItem.todo" (change)="updateCheckbox(inputItem)"/></td>
+      <td><input [(ngModel)]="inputItem.name" placeholder="name"></td>
+      <td><input [(ngModel)]="inputItem.rating" placeholder="rating"></td>
+      <td>
+        <button (click)="saveItem(inputItem)">Save</button>
+      </td>
+    </tr>
+    <tr *ngFor="let item of items"
         (click)="onSelect(item)"
         [class.selected]="item === selectedItem">
-    <span class="badge">
-      <label>id: </label>{{item.id}}
-    </span>
-      <label>name: </label>{{item.name}}
-    </li>
-  </ul>
-
-</h3>
-<button (click)="goBack()">Back</button>
+      <td><input type="checkbox" [checked]="item.todo" (change)="updateCheckbox(item)"/></td>
+      <td>{{item.name}}</td>
+      <td><input [(ngModel)]="item.rating" (change)="updateItem(item)" placeholder="rating"></td>
+      <td><button (click)="deleteItem(item)">Delete</button></td>
+    </tr>
+  </table>
+  <button (click)="goBack()">Back</button>
+  <button (click)="deleteCategory(category)">Delete collection</button>
+</div>

@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var Category = (function () {
-    function Category() {
+    function Category(name) {
+        this.name = name;
     }
     return Category;
 }());

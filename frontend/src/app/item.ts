@@ -1,9 +1,14 @@
 import {Category} from './category';
 
 export class Item {
-  id: number;
+  constructor(name: string, rating: number, todo: boolean, category: Category) {
+    this.name = name;
+    this.rating = rating;
+    this.todo = todo;
+    this.category = category;
+  }
   name: string;
-  stars: number;
+  rating: number;
   todo: boolean;
   category: Category;
 }
