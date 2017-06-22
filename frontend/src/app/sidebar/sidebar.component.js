@@ -27,7 +27,7 @@ var SidebarComponent = (function () {
         this.itemService.getCategories()
             .then(function (categories) {
             _this.categories = categories;
-            _this.inputCategory = new category_1.Category("input");
+            _this.inputCategory = new category_1.Category('');
         });
     };
     SidebarComponent.prototype.saveCategory = function (category) {

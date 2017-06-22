@@ -22,7 +22,7 @@ export class SidebarComponent implements OnInit {
     this.itemService.getCategories()
       .then(categories => {
         this.categories = categories;
-        this.inputCategory = new Category("input");
+        this.inputCategory = new Category('');
       });
   }
 

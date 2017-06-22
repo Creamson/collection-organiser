@@ -6,14 +6,18 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
         classpath 'com.monits:static-code-analysis-plugin:2.4.1'
+        classpath('se.transmode.gradle:gradle-docker:1.2')
     }
 }
+
+group = 'springio'
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'com.monits.staticCodeAnalysis'
+apply plugin: 'docker'
 
 jar {
     baseName = 'gs-spring-boot'
@@ -48,4 +52,16 @@ dependencies {
     testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
     testCompile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.9.0'
 
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+    push = false
+    applicationName = jar.baseName
+    dockerfile = file('src/main/docker/Dockerfile')
+    doFirst {
+        copy {
+            from jar
+            into stageDir
+        }
+    }
 }
