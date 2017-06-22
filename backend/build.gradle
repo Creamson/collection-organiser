@@ -10,8 +10,6 @@ buildscript {
     }
 }
 
-group = 'springio'
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
@@ -20,7 +18,7 @@ apply plugin: 'com.monits.staticCodeAnalysis'
 apply plugin: 'docker'
 
 jar {
-    baseName = 'gs-spring-boot'
+    baseName = 'collection-organiser'
     version =  '0.1.0'
 }
 

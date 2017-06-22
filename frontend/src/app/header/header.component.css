@@ -10,14 +10,14 @@
   font-size: 2em;
   text-align: center;
   float: left;
-  width: 40%;
+  width: 30%;
   line-height: 3.5rem;
-  margin-left: 30%;
+  margin-left: 35%;
 }
 
 .header-right {
   float: left;
-  width: 30%;
+  width: 35%;
   text-align: right;
   line-height: 3.5em;
 }

@@ -60,12 +60,5 @@ public class AppConfig {
 
     private String fetchClientID() throws IOException {
         return this.clientInfo;
-//        ClassLoader classLoader = getClass().getClassLoader();
-//        File file = new File(classLoader.getResource("client-info").getFile());
-//
-//        try(BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))){
-//            return reader.readLine();
-//        }
-
     }
 }
