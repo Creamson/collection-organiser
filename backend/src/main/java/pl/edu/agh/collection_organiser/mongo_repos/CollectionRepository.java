@@ -1,4 +1,4 @@
-package pl.edu.agh.collection_organiser.mongoRepos;
+package pl.edu.agh.collection_organiser.mongo_repos;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import pl.edu.agh.collection_organiser.model.Collection;

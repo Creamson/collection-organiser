@@ -3,18 +3,20 @@ package pl.edu.agh.collection_organiser.controllers;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import org.apache.http.auth.AuthenticationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.collection_organiser.config.View;
+import pl.edu.agh.collection_organiser.exceptions.NotFoundException;
 import pl.edu.agh.collection_organiser.model.Collection;
 import pl.edu.agh.collection_organiser.model.CollectionItem;
-import pl.edu.agh.collection_organiser.mongoRepos.CollectionRepository;
+import pl.edu.agh.collection_organiser.mongo_repos.CollectionRepository;
+import pl.edu.agh.collection_organiser.services.CollectionService;
 import pl.edu.agh.collection_organiser.utils.TokenExtractor;
 
 import javax.annotation.Resource;
-import javax.naming.AuthenticationException;
 import java.io.*;
 import java.security.GeneralSecurityException;
 import java.util.List;
@@ -27,9 +29,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 public class CollectionController {
 
     @Resource
-    private TokenExtractor tokenExtractor;
+    CollectionService collectionService;
     @Resource
-    private CollectionRepository collectionRepository;
+    private TokenExtractor tokenExtractor;
     @Resource
     private GoogleIdTokenVerifier verifier;
 
@@ -38,10 +40,10 @@ public class CollectionController {
     public ResponseEntity createCollection(@RequestHeader(value = "Authorization") String authHeader,
                                            @RequestBody Collection toCreate) {
 
-        return verifyTokenAndGetResponse(authHeader, (String userID) -> {
-            toCreate.setOwnerId(userID);
+        return verifyTokenAndGetResponse(authHeader, (String userId) -> {
+            toCreate.setOwnerId(userId);
             try {
-                this.collectionRepository.insert(toCreate);
+                this.collectionService.createCollection(toCreate);
             } catch (DuplicateKeyException e) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Collection already exists.");
             }
@@ -54,9 +56,8 @@ public class CollectionController {
     @RequestMapping(method = GET, path = "/collections")
     public ResponseEntity getCollections(@RequestHeader(value = "Authorization") String authHeader) {
 
-        return verifyTokenAndGetResponse(authHeader, (String userID) -> {
-            List<Collection> collections = this.collectionRepository.findAllByOwnerId(userID);
-
+        return verifyTokenAndGetResponse(authHeader, (String userId) -> {
+            List<Collection> collections = this.collectionService.getCollections(userId);
             return ResponseEntity.status(HttpStatus.OK).body(collections);
         });
     }
@@ -67,12 +68,13 @@ public class CollectionController {
     public ResponseEntity getCollection(@RequestHeader(value = "Authorization") String authHeader,
                                         @PathVariable String collectionName) {
 
-        return verifyTokenAndGetResponse(authHeader, (String userID) -> {
-            Collection requestedCollection = this.collectionRepository.findByOwnerIdAndName(userID, collectionName);
-            if (requestedCollection != null) {
+        return verifyTokenAndGetResponse(authHeader, (String userId) -> {
+            try {
+                Collection requestedCollection = this.collectionService.getCollection(userId, collectionName);
                 return ResponseEntity.status(HttpStatus.OK).body(requestedCollection);
+            } catch (NotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found");
         });
     }
 
@@ -82,14 +84,15 @@ public class CollectionController {
                                            @PathVariable String collectionName,
                                            @RequestBody Collection updatedCollection) {
 
-        return verifyTokenAndGetResponse(authHeader, (String userID) -> {
-            Collection collectionToEdit = this.collectionRepository.findByOwnerIdAndName(userID, collectionName);
-            if (collectionToEdit != null) {
-                collectionToEdit.update(updatedCollection);
-                this.collectionRepository.save(collectionToEdit);
-                return ResponseEntity.status(HttpStatus.OK).build();
+        return verifyTokenAndGetResponse(authHeader, (String userId) -> {
+            try {
+                this.collectionService.updateCollection(userId, collectionName, updatedCollection);
+            } catch (NotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            } catch (DuplicateKeyException e) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found");
+            return ResponseEntity.status(HttpStatus.OK).build();
         });
     }
 
@@ -99,13 +102,13 @@ public class CollectionController {
     public ResponseEntity deleteCollection(@RequestHeader(value = "Authorization") String authHeader,
                                            @PathVariable String collectionName) {
 
-        return verifyTokenAndGetResponse(authHeader, (String userID) -> {
-            Collection collectionToDelete = this.collectionRepository.findByOwnerIdAndName(userID, collectionName);
-            if (collectionToDelete != null) {
-                this.collectionRepository.delete(collectionToDelete);
-                return ResponseEntity.status(HttpStatus.OK).build();
+        return verifyTokenAndGetResponse(authHeader, (String userId) -> {
+            try {
+                this.collectionService.deleteCollection(userId, collectionName);
+            } catch (NotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found");
+            return ResponseEntity.status(HttpStatus.OK).build();
         });
     }
 
@@ -116,15 +119,14 @@ public class CollectionController {
                                   @PathVariable String collectionName,
                                   @PathVariable String itemName) {
 
-        return verifyTokenAndGetResponse(authHeader, (String userID) -> {
-            Collection requestedCollection = this.collectionRepository.findByOwnerIdAndName(userID, collectionName);
-            if (requestedCollection != null) {
-                Optional<CollectionItem> requestedItem = requestedCollection.getItemByName(itemName);
-                if (requestedItem.isPresent()) {
-                    return ResponseEntity.status(HttpStatus.OK).body(requestedItem.get());
-                }
+        return verifyTokenAndGetResponse(authHeader, (String userId) -> {
+            try {
+                CollectionItem requestedItem = this.collectionService.getItem(userId, collectionName, itemName);
+                return ResponseEntity.status(HttpStatus.OK).body(requestedItem);
+            } catch (NotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found");
+
         });
     }
 
@@ -134,18 +136,15 @@ public class CollectionController {
                                      @PathVariable String collectionName,
                                      @RequestBody CollectionItem item) {
 
-        return verifyTokenAndGetResponse(authHeader, (String userID) -> {
-            Collection collection = this.collectionRepository.findByOwnerIdAndName(userID, collectionName);
-            if (collection != null) {
-                try {
-                    collection.addItem(item);
-                    this.collectionRepository.save(collection);
-                    return ResponseEntity.status(HttpStatus.CREATED).build();
-                } catch (DuplicateKeyException e) {
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-                }
+        return verifyTokenAndGetResponse(authHeader, (String userId) -> {
+            try {
+                this.collectionService.createItem(userId, collectionName, item);
+            } catch (NotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            } catch (DuplicateKeyException e) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found");
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         });
     }
 
@@ -155,24 +154,15 @@ public class CollectionController {
                                      @PathVariable String collectionName,
                                      @PathVariable String itemName,
                                      @RequestBody CollectionItem item) {
-        return verifyTokenAndGetResponse(authHeader, (String userID) -> {
-            Collection collection = this.collectionRepository.findByOwnerIdAndName(userID, collectionName);
-            if (collection != null) {
-                Optional<CollectionItem> toUpdate = collection.getItemByName(itemName);
-                if(toUpdate.isPresent()) {
-                    Optional<CollectionItem> duplicate = collection.getItemByName(item.getName());
-                    if (!duplicate.isPresent() || duplicate.get().equals(toUpdate.get())) {
-                        toUpdate.get().update(item);
-
-                        this.collectionRepository.save(collection);
-                        return ResponseEntity.status(HttpStatus.OK).build();
-
-                    }
-                    return ResponseEntity.status(HttpStatus.CONFLICT).body("Item already exists");
-                }
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found");
+        return verifyTokenAndGetResponse(authHeader, (String userId) -> {
+            try {
+                this.collectionService.updateItem(userId, collectionName, itemName, item);
+            } catch (NotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            } catch (DuplicateKeyException e) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found");
+            return ResponseEntity.status(HttpStatus.OK).build();
         });
     }
 
@@ -183,13 +173,12 @@ public class CollectionController {
                                      @PathVariable String itemName) {
 
         return verifyTokenAndGetResponse(authHeader, (String userID) -> {
-            Collection collection = this.collectionRepository.findByOwnerIdAndName(userID, collectionName);
-            if (collection != null) {
-                collection.remove(itemName);
-                this.collectionRepository.save(collection);
-                return ResponseEntity.status(HttpStatus.OK).build();
+            try {
+                this.collectionService.deleteItem(userID, collectionName, itemName);
+            } catch (NotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collection not found");
+            return ResponseEntity.status(HttpStatus.OK).build();
         });
     }
 

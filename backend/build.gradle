@@ -45,4 +45,7 @@ dependencies {
 
     testCompile("junit:junit")
 	testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.10.19'
+    testCompile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.9.0'
+
 }
